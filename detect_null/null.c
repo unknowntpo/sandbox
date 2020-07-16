@@ -16,16 +16,13 @@
 
 void show_binary(long int i)
 {
-    /* TODO: figure out how to print binary */
-    if (i == 0)
-        return;
-    printf("%ld: ", i);
-    while (i != 0) {
-        printf("%ld ", i % 2);
-        i >> 1;
+    /* use get bit technique to get the bit */
+    for (int index = 7; index >= 0; index--) {
+        printf("%d ", (i & (1 << index)) > 0);
     }
-    return;
+    printf("\n");
 }
+
 
 
 int main()
