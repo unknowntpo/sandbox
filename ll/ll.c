@@ -1,15 +1,21 @@
 /* test with pointer to pointer and linked list */
 
-/* TODO: deal with error check macro, debug macro? */
 /* TODO: Write the function description */
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/* 
+ * check if q is null pointer, if q is NULL, return 1, if q is not NULL,
+ * return 0.
+ */
 #define NULL_GUARD(q) \
     do {              \
         if (!q)       \
             return 1; \
     } while (0)
+
+/* err check: if err = 0 means no error, if err == 1 means error occured. */
 #define ERR_CHECK(err)\
     do { \
         if (err) \
@@ -62,13 +68,32 @@ queue_t *q_new()
     q->size = 0;
     return q;
 }
+
+bool q_free(queue_t *q)
+{
+    if (!q)
+        return 0;
+    for(list_ele_t *tmp = q->head; tmp; tmp = q->head) {
+        q->head = q->head->next;
+        free(tmp);
+    }
+
+}
+
 int main()
 {
     queue_t *q = q_new();
     NULL_GUARD(q);
     q_insert(q, 1);
+    q_insert(q, 2);
     err = q_show(q);
     // if error, set err to 1
     ERR_CHECK(err);
+    
+    err = q_free(q);
+    ERR_CHECK(err);
+    err = q_show(q);
+    ERR_CHECK(err);
+
     return 0;
 }
