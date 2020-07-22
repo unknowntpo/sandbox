@@ -3,8 +3,9 @@
 
 int mystrcmp(char *s, char *t)
 {
-    while (*s++ == *t++)
-        ;
+    for (; *s == *t; s++, t++)
+        if (*s == '\0')
+            return 0;
     return (int) (*s-*t);
 }
 
