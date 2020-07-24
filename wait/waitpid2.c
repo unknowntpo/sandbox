@@ -15,7 +15,9 @@
 
 #define N 2
 /* TODO: try with 2 parameter as input of macro */
-#if 1
+
+#define DEBUG_MODE 1 // Toggle this to turn debug mode, 1 means on, 0 means off.
+#if DEBUG_MODE
 #define PRINT_PID(i, pid) \
     do { \
         printf("pid[%d] = %d\n", i, pid); \
@@ -43,7 +45,7 @@ int main()
 
             pid_t realpid = getpid();
             printf("realpid = %d\n", realpid);
-#ifdef PRINT_PID
+#if DEBUG_MODE
             PRINT_PID(i, pid[i]);
 #endif
     
