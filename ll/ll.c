@@ -36,6 +36,10 @@ typedef struct {
 
 bool q_show(queue_t *q)
 {
+    if (!q) {
+        printf("[]\n");
+        return 0;
+    }
     list_ele_t **p = &q->head;
     printf("[");
     while (*p) {
@@ -89,6 +93,7 @@ bool q_free(queue_t *q)
     q->head = NULL;
     q->tail = NULL;
     q->size = 0;
+    free(q);
 
     return 0;
 }
