@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* 
+/*
  * check if q is null pointer, if q is NULL, return 1, if q is not NULL,
  * return 0.
  */
@@ -16,9 +16,9 @@
     } while (0)
 
 /* err check: if err = 0 means no error, if err == 1 means error occured. */
-#define ERR_CHECK(err)\
-    do { \
-        if (err) \
+#define ERR_CHECK(err)               \
+    do {                             \
+        if (err)                     \
             perror("error occured"); \
     } while (0)
 
@@ -37,26 +37,34 @@ typedef struct {
 bool q_show(queue_t *q)
 {
     list_ele_t **p = &q->head;
+    printf("[");
     while (*p) {
         printf("%d ", (*p)->val);
         p = &(*p)->next;
     }
+    printf("]");
+
     printf("\n");
     return 0;
 }
 bool q_insert(queue_t *q, int val)
 {
     NULL_GUARD(q);
-  
+
     /* build new node */
     list_ele_t *newh = malloc(sizeof(list_ele_t));
     NULL_GUARD(newh);
 
     newh->val = val;
-    
+
     /* update new head pos */
     newh->next = q->head;
     q->head = newh;
+
+    if (q->size <= 1)
+        q->tail = newh;
+
+    q->size++;
 
     return 0;
 }
@@ -73,11 +81,16 @@ bool q_free(queue_t *q)
 {
     if (!q)
         return 0;
-    for(list_ele_t *tmp = q->head; tmp; tmp = q->head) {
+    for (list_ele_t *tmp = q->head; tmp; tmp = q->head) {
         q->head = q->head->next;
         free(tmp);
     }
 
+    q->head = NULL;
+    q->tail = NULL;
+    q->size = 0;
+
+    return 0;
 }
 
 int main()
@@ -89,7 +102,7 @@ int main()
     err = q_show(q);
     // if error, set err to 1
     ERR_CHECK(err);
-    
+
     err = q_free(q);
     ERR_CHECK(err);
     err = q_show(q);
