@@ -1,6 +1,10 @@
 /* test with pointer to pointer and linked list */
 
 /* TODO: Write the function description */
+/* TODO: Functional programming paradiam
+ * Ref: Functional Programming 風格的 C 語言實作
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,6 +116,7 @@ int main()
     ERR_CHECK(err);
     err = q_show(q);
     ERR_CHECK(err);
+    /* demo of the usage of report.c */
 
     return 0;
 }
