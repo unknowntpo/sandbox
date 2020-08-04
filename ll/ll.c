@@ -5,14 +5,11 @@
  * Ref: Functional Programming 風格的 C 語言實作
  */
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
  * check if q is null pointer, if q is NULL, return 1, if q is not NULL,
  * return 0.
  */
+#include "ll.h"
 #define NULL_GUARD(q) \
     do {              \
         if (!q)       \
@@ -27,16 +24,6 @@
     } while (0)
 
 bool err = 0;
-typedef struct ELE {
-    int val;
-    struct ELE *next;
-} list_ele_t;
-typedef struct {
-    list_ele_t *head;
-    list_ele_t *tail;
-    int size;
-} queue_t;
-
 
 bool q_show(queue_t *q)
 {
