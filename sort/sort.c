@@ -18,16 +18,13 @@ void swap(int *px, int *py)
 
 int *sort_bubble(int *a, int size)
 {
-    int i, j;
-    for (i = 0; i < size - 1; i++) {
-        for (j = 0; j < size - 1; j++) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size - 1; j++) {
             if (a[j] > a[j+1])
-                swap(&a[j], &a[j+1]);
-        }   
+                swap(&a[j], &a[j + 1]);
+        }
         display(a, size);
     }
-
-
     return a;
 }
 
