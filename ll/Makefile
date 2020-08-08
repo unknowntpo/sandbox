@@ -7,7 +7,7 @@ DEPFLAGS := -MMD -MF
 all: $(target)
 
 # Add verbose mode
-ifeq ("V","1")
+ifeq ("$(v)","1")
     Q :=     # quiet
     VECHO := @true
 else
