@@ -6,7 +6,7 @@ CFLAGS := -g -Wall -Werror
 DEPFLAGS := -MMD -MF
 all: $(target)
 
-target: $(objs)
+$(target): $(objs)
 	$(CC) -o $@ $^
 
 %.o: %.c
