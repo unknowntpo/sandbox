@@ -1,16 +1,27 @@
 target := ll
-objs := ll.o
+objs := ll.o report.o
 CC := gcc
 deps := $(objs:%.o=.%.o.d)
 CFLAGS := -g -Wall -Werror
 DEPFLAGS := -MMD -MF
 all: $(target)
 
+# Add verbose mode
+ifeq ("V","1")
+    Q :=     # quiet
+    VECHO := @true
+else
+    Q := @
+    VECHO := @printf
+endif
+
 $(target): $(objs)
-	$(CC) -o $@ $^
+	$(VECHO) "LD\t $@\n"
+	$(Q)$(CC) -o $@ $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $(DEPFLAGS) .$@.d $<
+	$(VECHO) "CC\t $@\n"
+	$(Q)$(CC) $(CFLAGS) -o $@ -c $(DEPFLAGS) .$@.d $<
 
 .PHONY: clean
 clean:
