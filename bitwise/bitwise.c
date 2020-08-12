@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define XORSWAP_UNSAFE(a, b) \
+    ((a) ^= (b), (b) ^= (a), \
+     (a) ^= (b)) /* Doesn't work when a and b are the same object - assigns zero \
+                    (0) to the object in that case */
+#define XORSWAP(a, b) \
+         ((&(a) == &(b)) ? (a) \
+                        : XORSWAP_UNSAFE(a, b))
+
 void dec_to_bin(int num);
 int bitwise_op(int num);
 
@@ -27,6 +35,14 @@ void dec_to_bin(int num)
 
 int main()
 {
+    /* XOR swap demo */
+    int a= 1, b = 4;
+    
+    printf("a = %d, b = %d\n", a, b);
+    XORSWAP(a, b);
+    printf("a = %d, b = %d\n", a, b);
+
+    /* Bin_Dec transformation */
     int num = 10;
     //char alphabet  = 'a';
     dec_to_bin(num);
