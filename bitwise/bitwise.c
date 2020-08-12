@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+/* TODO: Refactor with Funtional Programming */
 
 #define XORSWAP_UNSAFE(a, b) \
     ((a) ^= (b), (b) ^= (a), \
