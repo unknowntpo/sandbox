@@ -23,10 +23,12 @@ void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n){
 void output(int* nums1, int nums1Size)
 {
     /* print out the result */
+    printf("Output: [");
     for (int i = 0; i < nums1Size; i++) {
-        printf("%d ", *nums1);
+        printf("%d%s", *nums1, (i < nums1Size - 1) ? "," : "");
         nums1++;
     }
+    printf("]");
     printf("\n");
 }
 
