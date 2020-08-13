@@ -4,7 +4,7 @@ CFLAGS := -g -Werror -Wall
 all: $(target)
 
 %: %.c
-	$(CC) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: clean
 clean:
