@@ -34,6 +34,16 @@ void dec_to_bin(int num)
     printf("\n");
 }
 
+void toggle_cap_small(void)
+{
+    char x = 'a', y = 'A';
+    x ^= ' ';
+    y ^= ' ';
+    printf("Toggle capital small alphabet...\n");
+    printf("%c\n", x);
+    printf("%c\n", y);
+}
+
 int main()
 {
     /* XOR swap demo */
@@ -51,5 +61,7 @@ int main()
     //alpha = alpha_op(alpha);
     dec_to_bin(num);
 
+    toggle_cap_small();
+    
     return 0;
 }
