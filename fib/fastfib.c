@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-unsigned int fastfib(int n)
+#define DEBUG_MODE 1 
+#define DEBUG(n) \
+    printf("fib[%d]\n", n)
+
+unsigned int fastfib(unsigned n)
 {
+#if DEBUG_MODE
+    DEBUG(n);
+#endif
     if (n == 0)
         return 0;
     else if (n <= 2)
@@ -12,10 +19,10 @@ unsigned int fastfib(int n)
         return fastfib(k + 1) * fastfib(k + 1) + fastfib(k) * fastfib(k);
     } else {
         unsigned int k = n / 2;
-        return 2 * fastfib(k) * (fastfib(k + 1) - fastfib(k));
+        return fastfib(k) * (2 * fastfib(k + 1) - fastfib(k));
     }
 }
-
+  
 int main(int argc, char **argv)
 {
     /* FIXME: Why fastfib(6) == 0 ? */
@@ -24,8 +31,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    int n = atoi(argv[1]);
-    
+    unsigned int n = atoi(argv[1]);
     unsigned int result = fastfib(n);
 
     printf("%d\n", result);
