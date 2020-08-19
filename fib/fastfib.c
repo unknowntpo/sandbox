@@ -22,10 +22,9 @@ unsigned int fastfib(unsigned n)
         return fastfib(k) * (2 * fastfib(k + 1) - fastfib(k));
     }
 }
-  
+ 
 int main(int argc, char **argv)
 {
-    /* FIXME: Why fastfib(6) == 0 ? */
     if (argc != 2 || atoi(argv[1]) < 0) {
         printf("<Usage> : ./fastfib [fibnum], fibnum >= 0\n");
         return 1;
