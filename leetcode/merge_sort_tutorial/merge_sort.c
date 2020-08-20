@@ -1,7 +1,22 @@
 #include <stdio.h>
 
+#define DEBUG_MODE 1
+
+
+
 void mergesort(int a[], int i, int j);
 void merge(int a[], int i1, int j1, int i2, int j2);
+
+
+void p_output(int *a, int n)
+{
+    printf("Output: ");
+    printf("[");
+    for (int i = 0; i < n; i++)
+        printf("%d%s", a[i], (i < n - 1) ? " ": "");
+    printf("]");
+    printf("\n");
+}
 
 int main()
 {
@@ -15,17 +30,16 @@ int main()
 
     mergesort(a, 0, n - 1);
 
-    printf("\nSorted array is :");
-    for (i = 0; i < n; i++)
-        printf("%d ", a[i]);
-
+    p_output(a, n);
     return 0;
 }
 
 void mergesort(int a[], int i, int j)
 {
     int mid;
-
+#if DEBUG_MODE
+    p_output(a, j + 1);  // j + 1: size of array a
+#endif
     if (i < j) {
         mid = (i + j) / 2;
         mergesort(a, i, mid);          // left recursion
