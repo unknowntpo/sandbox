@@ -38,19 +38,14 @@ void xor_swap(int *a, int *b) {
 
 void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n){
     int i, j;
-    for (i = 0; i < nums2Size; i++) {
+    for (i = 0; i < n; i++) {
         for (j = 0; j < m; j++) {
-            if (nums2[i] < nums1[j]) {
+            if (nums2[i] < nums1[j])
                 xor_swap(&nums2[i], &nums1[j]);
-            }
         }
-        if (j == m) {
+        if (j == m)
             xor_swap(&nums2[i], &nums1[j]);
-            m++;
-            return;
-        }
-        output(nums1, nums1Size);
-        output(nums2, nums2Size);
+        m++;
     }
 }
 

@@ -1,8 +1,7 @@
 #include <stdio.h>
 
-#define DEBUG_MODE 1
+#define DEBUG_ON 1
 #define MAXSIZE 30
-
 
 void mergesort(int a[], int i, int j);
 void merge(int a[], int i1, int j1, int i2, int j2);
@@ -36,52 +35,49 @@ int main()
 
 void mergesort(int a[], int i, int j)
 {
-    // end condition
     if (i == j)
         return;
+    
     int mid = (i + j) / 2;
     
-    mergesort(a, 0, mid);
+    mergesort(a, i, mid);
     mergesort(a, mid + 1, j);
-    merge(a, 0, mid, mid + 1, j);
-    return;
+    merge(a, i, mid, mid + 1, j);
+#if DEBUG_ON
+    printf("\ti = %d, j = %d\nafter merge", i, j);
+    p_output(a, j + 1);
+#endif
 }
-
 void merge(int a[], int i1, int j1, int i2, int j2)
 {
-    /* TODO: implement this with leetcode merge sorted array */
-    // actually, it's merge sorted array
-    int i, j, k;
+    int k = 0, i = i1, j = i2;
     int temp[MAXSIZE];
-    
+#if DEBUG_ON
+    printf("\tmerge: i1 = %d, j1 = %d, i2 = %d, j2 = %d\n", i1, j1, i2, j2);
+#endif
     if (i1 == i2)
         return;
 
-    for (k = 0, i = i1, j = i2; (i <= j1) && (j <= j2) ; k++) {
-        if (a[i] < a[j]) {
-            temp[k] = a[i];
-            i++;
-        }
-        else {
-            temp[k] = a[j];
-            j++;    
-        }
-        if (i > j1) {
-            // copy rest of ele to temp, range from j to j2 
-            for (; j <= j2 ; j++, k++)
-                temp[k + 1] = a[j];
+    while (i <= j1 && j <=j2) {
+        if (a[i] < a[j])
+            temp[k++] = a[i++];
+        else
+            temp[k++] = a[j++];
+
+        while (i > j1) {
+            while (j <= j2) 
+                temp[k++] = a[j++];
             break;
         }
-        if (j > j2) {
-            // copy rest of ele to temp, range from i to j1
-            for (; i <= j1 ; i++, k++)
-                temp[k + 1] = a[i];
+            
+        while (j > j2) {
+            while (i <= j1) 
+                temp[k++] = a[i++];
             break;
         }
     }
-    
-    /* copy element in temp[] back to a[] */
-    for (i = 0; i <= k; i++)
-        a[i] = temp[i];
+
+    for (i = i1, k = 0; i <= j2; i++, k++)
+        a[i] = temp[k];
     return;
 }
