@@ -1,109 +1,127 @@
-/* test with pointer to pointer and linked list */
-
-/* TODO: Write the function description */
-/* TODO: Functional programming paradiam
- * Ref: Functional Programming 風格的 C 語言實作
- */
-
 /*
- * check if q is null pointer, if q is NULL, return 1, if q is not NULL,
- * return 0.
+ * This is the basic operation following the tutorial at 
+ * [Linked List Bubble Sort](http://faculty.salina.k-state.edu/tim/CMST302/study_guide/topic7/bubble.html)
  */
-#include "ll.h"
-#define NULL_GUARD(q) \
-    do {              \
-        if (!q)       \
-            return 1; \
-    } while (0)
 
-/* err check: if err = 0 means no error, if err == 1 means error occured. */
-#define ERR_CHECK(err)               \
-    do {                             \
-        if (err)                     \
-            perror("error occured"); \
-    } while (0)
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
 
-bool err = 0;
+typedef struct list {
+    int data;
+    struct list *next;
+} LIST;
 
-bool q_show(queue_t *q)
-{
-    if (!q) {
-        printf("[]\n");
-        return 0;
-    }
-    list_ele_t **p = &q->head;
-    printf("[");
-    while (*p) {
-        printf("%d ", (*p)->val);
-        p = &(*p)->next;
-    }
-    printf("]");
-
-    printf("\n");
-    return 0;
-}
-bool q_insert(queue_t *q, int val)
-{
-    NULL_GUARD(q);
-
-    /* build new node */
-    list_ele_t *newh = malloc(sizeof(list_ele_t));
-    NULL_GUARD(newh);
-
-    newh->val = val;
-
-    /* update new head pos */
-    newh->next = q->head;
-    q->head = newh;
-
-    if (q->size <= 1)
-        q->tail = newh;
-
-    q->size++;
-
-    return 0;
-}
-queue_t *q_new()
-{
-    queue_t *q = malloc(sizeof(queue_t));
-    q->head = NULL;
-    q->tail = NULL;
-    q->size = 0;
-    return q;
-}
-
-bool q_free(queue_t *q)
-{
-    if (!q)
-        return 0;
-    for (list_ele_t *tmp = q->head; tmp; tmp = q->head) {
-        q->head = q->head->next;
-        free(tmp);
-    }
-
-    q->head = NULL;
-    q->tail = NULL;
-    q->size = 0;
-    free(q);
-
-    return 0;
-}
+LIST *append(LIST *, int);
+LIST *sort(LIST *);
+LIST *list_switch(LIST *, LIST *);
+void print_list(LIST *);
 
 int main()
 {
-    queue_t *q = q_new();
-    NULL_GUARD(q);
-    q_insert(q, 1);
-    q_insert(q, 2);
-    err = q_show(q);
-    // if error, set err to 1
-    ERR_CHECK(err);
+    LIST *try;
 
-    err = q_free(q);
-    ERR_CHECK(err);
-    err = q_show(q);
-    ERR_CHECK(err);
-    /* demo of the usage of report.c */
-
+    /* Test insertion, sort, and display result */
+    try = NULL;
+    try = append(try, 5);
+    try = append(try, 2);
+    try = append(try, 9);
+    try = append(try, 8);
+    try = append(try, 1);
+    try = append(try, 7);
+    
+    printf("Original list:\n");
+    print_list( try );
+    try = sort( try );
+    printf("Sorted list:\n");
+    print_list( try );
+    
     return 0;
+}
+
+/* Print lists with pointer to pointer */
+void print_list(LIST *t)
+{
+    LIST **indir_head;
+    for (indir_head = &t; *indir_head != NULL; indir_head = &(*indir_head)->next)
+        printf("%d\n", (*indir_head)->data);
+}
+
+LIST *append(LIST *start, int newdata)
+{
+    LIST *new, *end, *ret;
+
+    if ((new = malloc(sizeof(LIST))) == NULL) {
+        fprintf(stderr, "Error: Memory allocation\n");
+        exit(1);
+    }
+
+    /* Do append */
+    if (start == NULL)
+        ret = new;
+    else {
+        ret = start;
+        end = start;
+        while(end->next != NULL) end = end->next;
+        end->next = new;
+    }
+    
+    new->data = newdata;
+    new->next = NULL;
+
+    return ret;
+}
+
+LIST *sort( LIST *start )
+{
+    LIST *p, *q, *top;
+    int changed = 1;
+
+    /*
+    * We need an extra item at the top of the list just to help
+    * with assigning switched data to the 'next' of a previous item.
+    * It (top) gets deleted after the data is sorted.
+    */
+
+    if( (top = (LIST *)malloc(sizeof(LIST))) == NULL) {
+        fprintf( stderr, "Memory Allocation error.\n" );
+        // In Windows, replace following with a return statement.
+        exit(1);
+    }
+
+    top->next = start;
+    if( start != NULL && start->next != NULL ) {
+        /*
+        * This is a survival technique with the variable changed.
+        *
+        * Variable q is always one item behind p. We need q, so
+        * that we can make the assignment q->next = list_switch( ... ).
+        */
+
+        while( changed ) {
+            changed = 0;
+            q = top;
+            p = top->next;
+            while( p->next != NULL ) {
+                /* push bigger items down */
+                if( p->data > p->next->data ) {
+                    q->next = list_switch( p, p->next );
+                    changed = 1;
+                }
+                q = p;
+                if( p->next != NULL )
+                    p = p->next;
+            }
+        }
+    }
+    p = top->next;
+    free( top );
+    return p;
+}
+
+LIST *list_switch( LIST *l1, LIST *l2 )
+{
+    l1->next = l2->next;
+    l2->next = l1;
+    return l2;
 }

@@ -1,5 +1,5 @@
 target := ll
-objs := ll.o report.o
+objs := ll.o
 CC := gcc
 deps := $(objs:%.o=.%.o.d)
 CFLAGS := -g -Wall -Werror

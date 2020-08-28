@@ -1,1 +1,1 @@
-ll.o: ll.c ll.h
+ll.o: ll.c
