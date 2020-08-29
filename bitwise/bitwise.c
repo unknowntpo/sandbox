@@ -22,18 +22,10 @@ int bitwise_op(int num)
 }
 void dec_to_bin(int num)
 {
-    int a[10], i; 
-    for (i = 0; num > 0; i++) {
-        a[i] = num % 2;
-        num = num / 2;
-    }
-    printf("\nBinary of Given Number is: ");
-    for (i = i - 1; i >= 0; i--) {
-        printf("%d ", a[i]);
-    }
+    for (int i = 0; i < num; i++)
+        printf("%d%s", num & (1 << i), (i == (num - 1)) ? "":" ");
     printf("\n");
 }
-
 void toggle_cap_small(void)
 {
     char x = 'a', y = 'A';

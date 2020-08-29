@@ -41,9 +41,9 @@ int main(){
     test_show_bytes(12345);
 
 
-    show_bytes("12345", 6);
+    //show_bytes("12345", 6);
     // 练习题2.7
-    const char *s = "abcdef";
-    show_bytes((byte_pointer)s, strlen(s));
+    //const char *s = "abcdef";
+    //show_bytes((byte_pointer)s, strlen(s));
     return 0;
 }
