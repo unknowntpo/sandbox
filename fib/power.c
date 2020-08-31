@@ -13,7 +13,7 @@
 long long power_recur(long long a, long long b)
 {
     if (b == 0) return 1;
-    if (b == 0) return a;
+    if (b == 1) return a;
 
     long long res = power_recur(a, b / 2);
     res *= res;
