@@ -1,21 +1,19 @@
 <?php
 
-define("MAXSIZE", 3);
+define("MAXSIZE", 6);
 /* TODO: how to init an array with explicitly specify the size */
-//$a[MAXSIZE] = array_fill(0, MAXSIZE, 0);
-$a[3] = ["a", "b"];
-var_dump($a);
+
 /* 
  * Main control flow
  */
-//main();
+main();
 
 /* 
  * Function Definition
  */
 function gen_array()
 {
-    $a = array(3, 2, 1);
+    $a = array(3, 2, 1, 4, 6, 1);
     return $a;
 }
 function show_array($a)
@@ -41,11 +39,11 @@ function merge_sort($a, $h, $t)  // $h: head $t: tail
 
 function merge($a, $h1, $t1, $h2, $t2)
 {
-    if ($h1 == $t1) return $a;
-    $temp[MAXSIZE] = array_fill(0, MAXSIZE, 0);
+    if ($h1 == $h2) return $a;
+    $temp = array_fill(0, MAXSIZE, 0);
     $idx_temp = 0;  // index of temp[]
     $idxh = $h1;  // index of first segment
-    $idxt = $t1;  // index of second segment
+    $idxt = $h2;  // index of second segment
     
     /* compare, put smaller one into temp */
     if ($a[$idxh] <= $a[$idxt])
