@@ -3,6 +3,11 @@
 define("MAXSIZE", 6);
 /* TODO: how to init an array with explicitly specify the size */
 
+
+
+/* Test */
+
+
 /* 
  * Main control flow
  */
@@ -13,9 +18,12 @@ main();
  */
 function gen_array()
 {
-    $a = array(3, 2, 1, 4, 6, 1);
+    $a = array(3, 2, 1, 4, 2 , 6, -2);
     return $a;
 }
+
+/* FIXME: unexpected output when showing temp[] = [0, 0, 0, 0] (!next doesn't work) */
+/* Read the array key value tutorial and try again */
 function show_array($a)
 {
     foreach ($a as $ele) {
@@ -23,6 +31,7 @@ function show_array($a)
         printf("\n");
     }
 }
+
 
 // get array as input
 function merge_sort($a, $h, $t)  // $h: head $t: tail 
@@ -45,20 +54,23 @@ function merge($a, $h1, $t1, $h2, $t2)
     $idxh = $h1;  // index of first segment
     $idxt = $h2;  // index of second segment
     
+    show_array($temp);
     /* compare, put smaller one into temp */
-    if ($a[$idxh] <= $a[$idxt])
-        $temp[$idx_temp++] = $a[$idxh++];
-    else
-        $temp[$idx_temp++] = $a[$idxt++];
-
-    /* Update: copy from temp to a */
-    if ($idxh > $t1)
-        while($idxt <= $t2)
-            $temp[$idx_temp++] = $a[$idxt++];
-    if ($idxt > $t2)
-        while($idxh <= $t1)
+    while ($idxh <= $t1 && $idxt <= $t2) {
+        if ($a[$idxh] <= $a[$idxt])
             $temp[$idx_temp++] = $a[$idxh++];
+        else
+            $temp[$idx_temp++] = $a[$idxt++];
+    }
     
+
+    /* Update: copy rest of ele to temp */
+    while($idxt <= $t2)
+        $temp[$idx_temp++] = $a[$idxt++];
+    while($idxh <= $t1)
+        $temp[$idx_temp++] = $a[$idxh++];
+    
+    /* Copy ele from temp to a */
     for ($i = $h1, $idx_temp = 0; $i <= $t2;)
         $a[$i++] = $temp[$idx_temp++];
 
@@ -70,9 +82,8 @@ function main()
     /* Main control flow */
     $a = gen_array();
     $size = count($a);
-
+    show_array($a);
     $a = merge_sort($a, 0, $size - 1);
-
     show_array($a);
 }
 
