@@ -4,13 +4,13 @@ class Fruit
     public $name;
     public $color;
 
-    function __construct($name, $color)
+    public function __construct($name, $color)
     {
         $this->name = $name;
         $this->color = $color;
     }
 
-    function __destruct()
+    public function __destruct()
     {
         echo "The fruit is {$this->name}, and the color is {$this->color}\n";
     }
@@ -26,7 +26,7 @@ class Strawberry extends Fruit
 
 $apple = new Fruit("Apple", "Red");
 $banana = new Fruit("Banana", "Green");
-$strawberry = new Strawberry("strawberry", "Red"); 
+$strawberry = new Strawberry("strawberry", "Red");
 $strawberry->message();
 
 // function show_fruit($fruit)
