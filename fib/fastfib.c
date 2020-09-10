@@ -6,6 +6,7 @@
 
 long long fib_tail(long long n, long long a, long long b);
 long long fib(long long n);
+long long fib_iter(long long n);
 long long fastfib(long long n);
 /* Function pointer to selected fib function */
 long long (*fp)(long long n);
@@ -13,8 +14,10 @@ long long (*fp)(long long n);
 
 long long fib_tail(long long n, long long a, long long b)
 {
-    if (n == 0) return a;
-    return fib_tail(n - 1, b , a + b);
+    if (n == 0)
+        return a;
+
+    return fib_tail(n - 1, b, a + b);
 }
 /* Calling the actual tail recursion fib funciton */
 long long fib(long long n)
@@ -22,6 +25,27 @@ long long fib(long long n)
     return fib_tail(n, 0, 1);
 }
 
+
+/* Iterative counting fibonacci numbers */
+long long fib_iter(long long n)
+{
+    long long a = 0;       // f(0)
+    long long b = 1;       // f(1)
+    long long result = 0;  // result
+
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+
+    for (long long i = 2; i <= n; i++) {
+        result = a + b;
+        a = b;
+        b = result;
+    }
+
+    return result;
+}
 long long fastfib(long long n)
 {
 #if DEBUG_MODE
@@ -47,8 +71,8 @@ int main(int argc, char **argv)
         return 1;
     }
     /* TODO: Use array of function pointer to switch different fib method */
-    //fp = fastfib;
-    fp = fib;
+    // fp = fastfib;
+    fp = fib_iter;
     long long n = atoll(argv[1]);
     long long result = fp(n);
 
