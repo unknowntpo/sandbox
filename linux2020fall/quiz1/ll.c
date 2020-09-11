@@ -52,10 +52,7 @@ void remove_entry_non_indirect(node_t *head, node_t *entry)
     node_t *pre = NULL;
 
     while(cur != entry) {
-        if (!pre) 
-            pre = head;
-        else
-            pre = cur;
+        pre = cur;
         cur = cur->next;
     }
     /* We found entry here */
