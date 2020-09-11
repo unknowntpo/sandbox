@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define NONDIRECT 1
 typedef struct __node {
     int value;
     struct __node *next;
@@ -43,6 +44,24 @@ void remove_entry(node_t **head, node_t *entry)
 
     *indirect = entry->next;
     free(entry);
+}
+
+void remove_entry_non_indirect(node_t *head, node_t *entry)
+{
+    node_t *cur = head;
+    node_t *pre = NULL;
+
+    while(cur != entry) {
+        if (!pre) 
+            pre = head;
+        else
+            pre = cur;
+        cur = cur->next;
+    }
+    /* We found entry here */
+    if (!pre)
+        head = cur->next;
+    pre->next = cur->next;
 }
 
 node_t *swap_pair(node_t *head)
@@ -92,14 +111,20 @@ int main(int argc, char const *argv[])
 
     puts("removing entry...");
     node_t *entry = find_entry(head, 101);
+#if NONDIRECT
+    remove_entry_non_indirect(head, entry);
+#else
     remove_entry(&head, entry);
-
+#endif
     print_list(head);
 
     puts("removing entry...");
     entry = find_entry(head, 111);
+#if NONDIRECT
+    remove_entry_non_indirect(head, entry);
+#else
     remove_entry(&head, entry);
-
+#endif
     print_list(head);
     /* swap pair.
      * See https://leetcode.com/problems/swap-nodes-in-pairs/
