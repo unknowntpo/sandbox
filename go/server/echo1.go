@@ -12,8 +12,9 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "<h1> Welcome to Message Filter~ </h1>\n")
-    fmt.Fprintf(w, "URL path = %s\n", r.URL.Path)
+    fmt.Fprintln(w, "<h1>Hello world Man</h1>")
+    fmt.Fprintf(w, "URL = %q\n", r.URL.Path)
 }
+
 
 
