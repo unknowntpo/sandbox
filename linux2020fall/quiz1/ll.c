@@ -1,6 +1,6 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #define NONDIRECT 1
 typedef struct __node {
@@ -11,7 +11,7 @@ typedef struct __node {
 void add_entry(node_t **head, int new_value)
 {
     node_t **indirect = head;
-    
+
     node_t *new_node = malloc(sizeof(node_t));
     new_node->value = new_value;
     new_node->next = NULL;
@@ -31,7 +31,7 @@ node_t *find_entry(node_t *head, int value)
     node_t *current = head;
     for (; current && (current->value != value); current = current->next)
         /* Iterate */;
-    return current; 
+    return current;
 }
 
 
@@ -51,7 +51,7 @@ void remove_entry_non_indirect(node_t *head, node_t *entry)
     node_t *cur = head;
     node_t *pre = NULL;
 
-    while(cur != entry) {
+    while (cur != entry) {
         pre = cur;
         cur = cur->next;
     }
@@ -61,26 +61,31 @@ void remove_entry_non_indirect(node_t *head, node_t *entry)
     pre->next = cur->next;
 }
 
-node_t *swap_pair(node_t *head)
+void swap_pair(node_t **indirect_head)
 {
-    for (node_t **node = &head; *node && (*node)->next; node = &(*node)->next->next) {
+    for (node_t **node = indirect_head; *node && (*node)->next;
+         node = &(*node)->next->next) {
         node_t *tmp = *node;
         *node = (*node)->next;
         tmp->next = (*node)->next;
         (*node)->next = tmp;
     }
-    return head;
+    return;
 }
 
-node_t *reverse(node_t *head)
+void reverse(node_t **indirect_head)
 {
     node_t *cursor = NULL;
-    while (head) {
-        node_t *next = head->next;
-        head->next = cursor; cursor = head;
-        head = next;
+    while (*indirect_head) {
+        node_t *next = (*indirect_head)->next;
+        (*indirect_head)->next = cursor;
+        cursor = (*indirect_head);
+        (*indirect_head) = next;
     }
-    return cursor;
+
+    *indirect_head = cursor;
+
+    return;
 }
 
 void print_list(node_t *head)
@@ -126,10 +131,11 @@ int main(int argc, char const *argv[])
     /* swap pair.
      * See https://leetcode.com/problems/swap-nodes-in-pairs/
      */
-    head = swap_pair(head);
+    puts("swaping pair...");
+    swap_pair(&head);
     print_list(head);
-
-    head = reverse(head);
+    puts("reversing... ");
+    reverse(&head);
     print_list(head);
 
     return 0;
