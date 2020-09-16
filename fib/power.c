@@ -13,21 +13,21 @@
 long long power_recur(long long a, long long b)
 {
     if (b == 0) return 1;
-    if (b == 0) return a;
+    if (b == 1) return a;
 
-    long long res = power_recur(a, b / 2);
-    res *= res;
-    if (b % 2)
-        res = a * res;
+    long long res = power_recur(a, b / 2);  // get a^(b/2)
+    res *= res;  // res = (a^(b/2)) ^ 2
+    if (b % 2)   // if b is odd
+        res = a * res;  // res = a * (a^(b/2)) ^ 2
     return res;
 } 
 long long power_iter(long long a, long long b)
 {
     long long result = 1;
-    while (b != 0) {
+
+    for(; b != 0; b /= 2) {
         if (b % 2) result *= a;
         a *= a;
-        b /= 2;
     }
     return result;
 }

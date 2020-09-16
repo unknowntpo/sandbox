@@ -4,10 +4,10 @@
 
 size_t mystrlen(char *s)
 {
-    size_t n = 0;
-    for(; *s; s++)
-        n++;
-    return n;
+    size_t len = 0;
+    while (*s++)
+        len++;
+    return len;
 }
 
 int main()
