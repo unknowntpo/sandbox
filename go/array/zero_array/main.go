@@ -7,18 +7,19 @@ import "fmt"
 func main() {
     c := [8]byte{1, 2, 3, 4, 5, 6, 7, 8}
     fmt.Println(c)
-    //zero(&c)
-    zeroEasyWay(&c)
+    zero(&c)
+    //zeroByEmptyArray(&c)
     fmt.Println(c)
 }
 
-func zero(ptr *[8]byte) {
-    // If you only need the first item in the range (the key or index), drop the second:
-    for i := range ptr {
-        ptr[i] = 0
+// zero the contents in array one by one
+func zero(pc *[8]byte) {
+    for i := range(pc) {
+        pc[i] = 0
     }
 }
 
-func zeroEasyWay(ptr *[8]byte) {
-    *ptr = [8]byte{}
+// Assign array literal to the array which pointed to by pc
+func zeroByEmptyArray(pc *[8]byte) {
+    *pc = [8]byte{}
 }
