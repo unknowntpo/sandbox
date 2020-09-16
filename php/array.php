@@ -24,7 +24,7 @@ function gen_array()
 
 /* FIXME: unexpected output when showing temp[] = [0, 0, 0, 0] (!next doesn't work) */
 /* Read the array key value tutorial and try again */
-function show_array($a)
+function show_array(&$a)
 {
     foreach ($a as $ele) {
         printf("%d%s", $ele, (!next($a) ? "" : " "));
@@ -34,7 +34,7 @@ function show_array($a)
 
 
 // get array as input
-function merge_sort($a, $h, $t)  // $h: head $t: tail 
+function merge_sort(&$a, $h, $t)  // $h: head $t: tail 
 {
     if ($h == $t) return $a;
     
@@ -46,7 +46,7 @@ function merge_sort($a, $h, $t)  // $h: head $t: tail
 }
 
 
-function merge($a, $h1, $t1, $h2, $t2)
+function merge(&$a, $h1, $t1, $h2, $t2)
 {
     if ($h1 == $h2) return $a;
     $temp = array_fill(0, MAXSIZE, 0);
@@ -54,7 +54,6 @@ function merge($a, $h1, $t1, $h2, $t2)
     $idxh = $h1;  // index of first segment
     $idxt = $h2;  // index of second segment
     
-    show_array($temp);
     /* compare, put smaller one into temp */
     while ($idxh <= $t1 && $idxt <= $t2) {
         if ($a[$idxh] <= $a[$idxt])
@@ -82,7 +81,7 @@ function main()
     /* Main control flow */
     $a = gen_array();
     $size = count($a);
-    show_array($a);
+    
     $a = merge_sort($a, 0, $size - 1);
     show_array($a);
 }
