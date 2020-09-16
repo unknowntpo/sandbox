@@ -61,9 +61,9 @@ void remove_entry_non_indirect(node_t *head, node_t *entry)
     pre->next = cur->next;
 }
 
-void swap_pair(node_t **indirect_head)
+void swap_pair(node_t **in_head)  // in_head: pointer to head of the list
 {
-    for (node_t **node = indirect_head; *node && (*node)->next;
+    for (node_t **node = in_head; *node && (*node)->next;
          node = &(*node)->next->next) {
         node_t *tmp = *node;
         *node = (*node)->next;
@@ -73,17 +73,17 @@ void swap_pair(node_t **indirect_head)
     return;
 }
 
-void reverse(node_t **indirect_head)
+void reverse(node_t **in_head)
 {
     node_t *cursor = NULL;
-    while (*indirect_head) {
-        node_t *next = (*indirect_head)->next;
-        (*indirect_head)->next = cursor;
-        cursor = (*indirect_head);
-        (*indirect_head) = next;
+    while (*in_head) {
+        node_t *next = (*in_head)->next;
+        (*in_head)->next = cursor;
+        cursor = (*in_head);
+        (*in_head) = next;
     }
 
-    *indirect_head = cursor;
+    *in_head = cursor;
 
     return;
 }
