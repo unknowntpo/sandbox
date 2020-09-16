@@ -7,7 +7,8 @@ import "fmt"
 func main() {
     c := [8]byte{1, 2, 3, 4, 5, 6, 7, 8}
     fmt.Println(c)
-    zero(&c)
+    //zero(&c)
+    zeroEasyWay(&c)
     fmt.Println(c)
 }
 
@@ -18,3 +19,6 @@ func zero(ptr *[8]byte) {
     }
 }
 
+func zeroEasyWay(ptr *[8]byte) {
+    *ptr = [8]byte{}
+}
