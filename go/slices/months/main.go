@@ -14,6 +14,15 @@ func main() {
 	Q2 := months[4:7]
         Q1 := months[1:4]
 	summer := months[6:9]
+
+        for _, s := range summer {
+            for _, q := range Q2 {
+                if s == q {
+                    fmt.Printf("%q appears in both\n", s) // if use %q: "Jun" appears in both
+                }
+            }
+        }
+
         fmt.Println("Q2:\t", Q2, "length:\t", len(Q2), "capacity:\t", cap(Q2))
         fmt.Println("Q1:\t", Q1, "length:\t", len(Q1), "capacity:\t", cap(Q1))
         fmt.Println("")
