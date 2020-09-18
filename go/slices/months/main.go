@@ -15,6 +15,11 @@ func main() {
         Q1 := months[1:4]
 	summer := months[6:9]
 
+        // cap of summer: (12 - 6) + 1 = 7, so we can extend slice without panic
+        // if panicSummer := summer[:8], we got panic
+        endlessSummer := summer[:5]
+        panicSummer := summer[:7]
+
         for _, s := range summer {
             for _, q := range Q2 {
                 if s == q {
@@ -25,6 +30,7 @@ func main() {
 
         fmt.Println("Q2:\t", Q2, "length:\t", len(Q2), "capacity:\t", cap(Q2))
         fmt.Println("Q1:\t", Q1, "length:\t", len(Q1), "capacity:\t", cap(Q1))
-        fmt.Println("")
-        fmt.Println("summer:\t", summer)
+        fmt.Println("summer:\t", summer, "length:\t", len(summer), "capacity:\t", cap(summer))
+        fmt.Println("endlessSummer:\t", endlessSummer, "length:\t", len(endlessSummer), "capacity:\t", cap(endlessSummer))
+        fmt.Println("panicSummer:\t", panicSummer, "length:\t", len(panicSummer), "capacity:\t", cap(panicSummer))
 }
