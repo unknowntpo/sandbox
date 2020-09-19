@@ -71,18 +71,16 @@ func (p *playlist) showAllSongs() error {
 	return nil
 }
 
-func (p *playlist) startPlaying() *song {
+func (p *playlist) startPlaying() {
 	p.nowPlaying = p.head
-	return p.nowPlaying
 }
 
-func (p *playlist) nextSong() *song {
+func (p *playlist) nextSong() {
+	fmt.Println("Changing next song...")
 	if p.nowPlaying.next == nil {
 		p.nowPlaying = p.head
-		return p.nowPlaying
 	}
 	p.nowPlaying = p.nowPlaying.next
-	return p.nowPlaying
 }
 
 func (p *playlist) showInfo() {
@@ -104,32 +102,31 @@ func main() {
 	myPlaylist.addSong("Feels", "Calvin Harris")
 
 	// show songs added
-	myPlaylist.showAllSongs()
+	err := myPlaylist.showAllSongs()
+	if err != nil {
+		fmt.Println("Error in showAllSongs...")
+	}
 	fmt.Println()
 
 	// Start playing
 	myPlaylist.startPlaying()
-	fmt.Printf("Now playing: %s by %s\n", myPlaylist.nowPlaying.name, myPlaylist.nowPlaying.artist)
-	fmt.Println()
-
-	// Next song
-	myPlaylist.nextSong()
-	fmt.Println("Changing next song...")
-	myPlaylist.showInfo()
-	// Next song
-	myPlaylist.nextSong()
-	fmt.Println("Changing next song...")
 	myPlaylist.showInfo()
 
 	// Next song
 	myPlaylist.nextSong()
-	fmt.Println("Changing next song...")
+	myPlaylist.showInfo()
+	// Next song
+	myPlaylist.nextSong()
 	myPlaylist.showInfo()
 
 	// Next song
 	myPlaylist.nextSong()
-	fmt.Println("Changing next song...")
 	myPlaylist.showInfo()
+
+	// Next song
+	myPlaylist.nextSong()
+	myPlaylist.showInfo()
+	//TODO: Try to handle errors of every operation
 	//TODO: Implement function/method to remove songs
 	//myPlaylist.removeSongs()
 }
