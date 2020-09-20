@@ -22,6 +22,8 @@ type playlist struct {
 func createPlayList(name string) *playlist { // what is the type error?
 	return &playlist{
 		name: name,
+                head: nil,
+                nowPlaying: nil,
 	}
 }
 
@@ -63,7 +65,6 @@ func (p *playlist) showAllSongs() error {
 		fmt.Println("playlist is empty")
 	}
 	for currentNode != nil {
-		// order of print?
 		fmt.Printf("%+v\n", *currentNode)
 		currentNode = currentNode.next
 	}
