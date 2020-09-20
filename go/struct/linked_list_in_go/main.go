@@ -40,6 +40,7 @@ func (p *playlist) addSong(name, artist string) error {
 
 	if p.head == nil {
 		p.head = s
+                p.nowPlaying = s
 	} else {
 		currentNode := p.head
 		for currentNode.next != nil {
