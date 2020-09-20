@@ -21,9 +21,9 @@ type playlist struct {
 
 func createPlayList(name string) *playlist { // what is the type error?
 	return &playlist{
-		name: name,
-                head: nil,
-                nowPlaying: nil,
+		name:       name,
+		head:       nil,
+		nowPlaying: nil,
 	}
 }
 
@@ -40,7 +40,7 @@ func (p *playlist) addSong(name, artist string) error {
 
 	if p.head == nil {
 		p.head = s
-                p.nowPlaying = s
+		p.nowPlaying = s
 	} else {
 		currentNode := p.head
 		for currentNode.next != nil {
@@ -86,6 +86,14 @@ func (p *playlist) nextSong() {
 }
 
 func (p *playlist) showInfo() {
+        if (p == nil) {
+            fmt.Println("Nil playlist")
+            return
+        }
+        if (p.head == nil)  {
+            fmt.Println("Empty playlist")
+            return
+        }
 	fmt.Printf("Now playing: %s by %s\n", p.nowPlaying.name, p.nowPlaying.artist)
 	fmt.Println()
 }
@@ -96,6 +104,7 @@ func main() {
 	fmt.Println("Creating playlist...")
 	fmt.Println()
 
+	myPlaylist.showInfo()
 	// Add songs
 	fmt.Println("Add songs to playlist...")
 	myPlaylist.addSong("Ophelia", "The Lumineers") // addSong is a method
