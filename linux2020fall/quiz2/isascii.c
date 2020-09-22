@@ -28,26 +28,22 @@
 #include <string.h>
 bool is_ascii(const char str[], size_t size)
 {
-    uint64_t payload;
-    size_t i;
-    if (size == 0) return false;
-    for (i = 0; (i + 8) < size; i = i + 8) {
+    if (size == 0)
+        return false;
+    int i = 0;
+    while ((i + 8) <= size) {
+        uint64_t payload;
         memcpy(&payload, str + i, 8);
-        if ((payload & 0x8080808080808080) > 0)
+        if (payload & 0x8080808080808080) // MMM
             return false;
+        i += 8;
     }
-
     while (i < size) {
-        if ((str[i] & 0x80) > 0)
+        if (str[i] & 0x80)
             return false;
         i++;
     }
-
     return true;
-    // copy ele in str into payload using memcpy
-    // use payload & 0x80808080 to check if there's a non ascii byte in str[]
-    // if not enough element to copy to payload
-    // check byte by byte
 }
 int main()
 {
@@ -56,7 +52,7 @@ int main()
 #if TEST_NON_ASCII
     c[1] = 128;
 #endif
-    printf("is %s ascii ? %s\n", c, is_ascii(c, sizeof(c)) ? "true" : "false");
+    printf("is %s ascii ? %s\n", c, is_ascii(c, strlen(c)) ? "true" : "false");
 
     return 0;
 }
