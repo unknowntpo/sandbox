@@ -7,8 +7,8 @@ import (
 )
 
 func reverse(s []int) {
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		s[i], s[j] = s[j], s[i]
+	for i := 0; i < len(s)-1-i; i = i + 1 {
+		s[i], s[len(s)-1-i] = s[len(s)-1-i], s[i]
 	}
 }
 
