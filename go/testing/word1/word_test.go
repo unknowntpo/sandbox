@@ -25,3 +25,10 @@ func TestCanalPalindrome(t *testing.T) {
 		t.Errorf(`IsPalindrome(%q) = false`, input)
 	}
 }
+
+func TestChinesePalindrome(t *testing.T) {
+        input := "我是我"
+        if !IsPalindrome(input) {
+                t.Errorf("IsPalindrome(%q) = false", input)
+        }
+}
