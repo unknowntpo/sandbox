@@ -6,7 +6,7 @@
  */
 
 /* Change to 1 if we want to test non ascii character */
-#define TEST_NON_ASCII 1
+#define TEST_NON_ASCII 0
 
 /*
 
@@ -31,19 +31,13 @@ bool is_ascii(const char str[], size_t size)
     if (size == 0)
         return false;
     int i = 0;
-
-    /* Check the character 8 bytes (1 word in 64-bit cpu) at a time */
     while ((i + 8) <= size) {
         uint64_t payload;
         memcpy(&payload, str + i, 8);
-        if (payload & MMM) // MMM
+        if (payload & 0x8080808080808080) // MMM
             return false;
         i += 8;
     }
-    /* 
-     * Not enough words,
-     * so check the character 1 byte at a time 
-     */
     while (i < size) {
         if (str[i] & 0x80)
             return false;
@@ -51,7 +45,6 @@ bool is_ascii(const char str[], size_t size)
     }
     return true;
 }
-
 int main()
 {
     char c[] = "12345678";
@@ -59,7 +52,7 @@ int main()
 #if TEST_NON_ASCII
     c[1] = 128;
 #endif
-    printf("is %s ascii ? %s\n", c, is_ascii(c, sizeof(c)) ? "true" : "false");
+    printf("is %s ascii ? %s\n", c, is_ascii(c, strlen(c)) ? "true" : "false");
 
     return 0;
 }
