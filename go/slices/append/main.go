@@ -30,29 +30,22 @@ func appendslice(x []int, y ...int) []int {
 
 //!+append
 func appendInt(x []int, y int) []int {
-	// if cap(x) >= len(x) + 1
-	// just let x[len(x)] == y
-	// can we append len(x) directly? <
-	// else ,
-	// means cap(x) < len(x) + 1
-	// allocate new slices with length cap(x) * 2
-	// copy from old slice x to new slice z
 
-	if cap(x) >= len(x)+1 {
-		z := x[:len(x)+1]
-		z[len(x)] = y
-		return z
-	}
-	// if we reach here, mean no enough space for new element
-	zlen := cap(x) + 1
-	zcap := len(x) + 1
-        // prevent 2 * 0
-        if zcap < 2*len(x) {
-            zcap = 2*len(x)
+        var z []int
+        zlen := len(x)+1
+        // set zcap
+
+        if zlen <= cap(x) {
+		z = x[:zlen]
+	} else {
+            zcap := zlen
+            // Won't execute if zcap == 1, len(x) == 0 (when x is nil slice)
+            if x != nil {
+                zcap = 2*len(x)
+            }
+            z = make([]int, zlen, zcap)
+            copy(z, x)
         }
-        var z []int // how to declare a nil slice?
-	z = make([]int, zlen, zcap)
-	copy(z, x)
         z[len(x)] = y
 	return z
 }
@@ -62,7 +55,7 @@ func appendInt(x []int, y int) []int {
 //!+growth
 func main() {
 	var x, y []int
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		y = appendInt(x, i)
 		fmt.Printf("%d  cap=%d\t%v\n", i, cap(y), y)
 		x = y
