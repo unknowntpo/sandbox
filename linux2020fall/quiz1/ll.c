@@ -1,13 +1,6 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "ll.h"
+#define DEBUG_ON 1
 #define NONDIRECT 1
-typedef struct __node {
-    int value;
-    struct __node *next;
-} node_t;
-
 void add_entry(node_t **head, int new_value)
 {
     node_t **indirect = head;
@@ -88,6 +81,42 @@ void reverse(node_t **in_head)
     return;
 }
 
+/* 
+ * Sort list in ascending order 
+ * Return if no need to sort
+ */
+node_t *bubble_sort(node_t *head)
+{
+    // get size
+    int size = 0;
+    for (node_t *h = head; h; h = h->next) 
+        size++;
+    
+    if (size <= 1) return head;
+
+    node_t **in_head;
+    for (int i = 0; i < size; i++) {    
+        in_head = &head;
+        for (int j = 0; j < size - 1 - i; j++) {
+            if ((*in_head)->value > (*in_head)->next->value) {
+                node_t *tmp = (*in_head)->next;
+                (*in_head)->next = tmp->next;
+                tmp->next = (*in_head);
+                (*in_head) = tmp; // set head to tmp
+            }
+            in_head = &(*in_head)->next;
+        }
+#if DEBUG_ON
+        print_list(head);
+#endif
+    }
+    // if no need to sort
+    // return 
+    // set sort variable
+    // sort n times, each time has n - 1 comparison
+    
+    return head;
+}
 void print_list(node_t *head)
 {
     for (node_t *current = head; current; current = current->next)
@@ -138,5 +167,8 @@ int main(int argc, char const *argv[])
     reverse(&head);
     print_list(head);
 
+    puts("bubble sorting... ");
+    head = bubble_sort(head);
+    print_list(head);
     return 0;
 }
