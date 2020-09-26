@@ -13,5 +13,5 @@ void remove_entry(node_t **head, node_t *entry);
 void remove_entry_non_indirect(node_t *head, node_t *entry);
 void swap_pair(node_t **in_head);
 void reverse(node_t **in_head);
-node_t *bubble_sort(node_t *head);
+void bubble_sort(node_t **in_head);
 void print_list(node_t *head);

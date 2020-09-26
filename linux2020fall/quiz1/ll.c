@@ -81,41 +81,42 @@ void reverse(node_t **in_head)
     return;
 }
 
-/* 
- * Sort list in ascending order 
+/*
+ * Sort list in ascending order
  * Return if no need to sort
  */
-node_t *bubble_sort(node_t *head)
+void bubble_sort(node_t **in_head)
 {
     // get size
     int size = 0;
-    for (node_t *h = head; h; h = h->next) 
+    for (node_t *h = *in_head; h; h = h->next)
         size++;
-    
-    if (size <= 1) return head;
 
-    node_t **in_head;
-    for (int i = 0; i < size; i++) {    
-        in_head = &head;
+    if (size <= 1)
+        return;
+
+    node_t **in_h = in_head;
+    for (int i = 0; i < size; i++) {
+        in_h = in_head;
         for (int j = 0; j < size - 1 - i; j++) {
-            if ((*in_head)->value > (*in_head)->next->value) {
-                node_t *tmp = (*in_head)->next;
-                (*in_head)->next = tmp->next;
-                tmp->next = (*in_head);
-                (*in_head) = tmp; // set head to tmp
+            if ((*in_h)->value > (*in_h)->next->value) {
+                node_t *tmp = (*in_h)->next;
+                (*in_h)->next = tmp->next;
+                tmp->next = (*in_h);
+                (*in_h) = tmp;  // set head to tmp
             }
-            in_head = &(*in_head)->next;
+            in_h = &(*in_h)->next;
         }
 #if DEBUG_ON
-        print_list(head);
+        print_list(*in_head);
 #endif
     }
     // if no need to sort
-    // return 
+    // return
     // set sort variable
     // sort n times, each time has n - 1 comparison
-    
-    return head;
+
+    return;
 }
 void print_list(node_t *head)
 {
@@ -168,7 +169,7 @@ int main(int argc, char const *argv[])
     print_list(head);
 
     puts("bubble sorting... ");
-    head = bubble_sort(head);
+    bubble_sort(&head);
     print_list(head);
     return 0;
 }
