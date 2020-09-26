@@ -93,7 +93,7 @@ func (p *playlist) removeSong(target string) { // by linus in c : passed in node
 		return
 	}
 
-        fmt.Printf("Removing song: %q...\n", target)
+	fmt.Printf("Removing song: %q...\n", target)
 	inHead := &p.head
 	for (**inHead).name != target {
 		inHead = &(*inHead).next
@@ -104,6 +104,44 @@ func (p *playlist) removeSong(target string) { // by linus in c : passed in node
 	// if target == current node
 	// set next pointer to target.next
 	return
+}
+
+/*
+        head
+        |
+x       1       2       3       4 nil
+|
+cursor
+
+
+*/
+func (p *playlist) reverseSong() {
+	if p.head == nil || p.head.next == nil {
+		fmt.Println("Nil or Empty playlist")
+		return
+	}
+
+	fmt.Println("Reversing playlist...")
+
+	var cursor, tmp *song
+
+	for cursor = nil; p.head != nil; p.head = tmp {
+		tmp = p.head.next
+		p.head.next = cursor
+		cursor = p.head
+	}
+	p.head = cursor
+
+	return
+
+	// if empty or p.head.next = nil
+	// just return
+	// cursor = nil
+	// for loop
+	// set tmp = head.next
+	// set head.next := cursor
+	// update cursor
+	// update head := tmp
 }
 func (p *playlist) showInfo() {
 	if p == nil {
@@ -159,27 +197,34 @@ func main() {
 	myPlaylist.showInfo()
 	//TODO: Try to handle errors of every operation
 
-        // Remove song "Feels"
+	// Reverse playlist
+	myPlaylist.reverseSong()
+	err = myPlaylist.showAllSongs()
+	if err != nil {
+		fmt.Println("Error in showAllSongs...")
+	}
+
+	// Remove song "Feels"
 	myPlaylist.removeSong("Feels")
 	err = myPlaylist.showAllSongs()
 	if err != nil {
 		fmt.Println("Error in showAllSongs...")
 	}
-        // Remove song "Shape of you"	
+	// Remove song "Shape of you"
 	myPlaylist.removeSong("Shape of you")
 
 	err = myPlaylist.showAllSongs()
 	if err != nil {
 		fmt.Println("Error in showAllSongs...")
 	}
-        // Remove song "Stubborn Love"	
+	// Remove song "Stubborn Love"
 	myPlaylist.removeSong("Stubborn Love")
 
 	err = myPlaylist.showAllSongs()
 	if err != nil {
 		fmt.Println("Error in showAllSongs...")
 	}
-        // Remove song "Ophelia"	
+	// Remove song "Ophelia"
 	myPlaylist.removeSong("Ophelia")
 
 	err = myPlaylist.showAllSongs()
@@ -187,9 +232,9 @@ func main() {
 		fmt.Println("Error in showAllSongs...")
 	}
 
-        // Remove song "Ophelia" again from empty playlist, test robusity
-        myPlaylist.removeSong("Ophelia")
-        if err != nil {
-            fmt.Println("Error in showAllSongs...")
-        }
+	// Remove song "Ophelia" again from empty playlist, test robusity
+	myPlaylist.removeSong("Ophelia")
+	if err != nil {
+		fmt.Println("Error in showAllSongs...")
+	}
 }
