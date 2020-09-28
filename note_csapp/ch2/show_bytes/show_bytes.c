@@ -4,27 +4,37 @@ typedef unsigned char *byte_pointer;
 
 void show_bytes(byte_pointer start, size_t len)
 {
-    size_t i;
-    for (i = 0; i < len; i++)
-       printf(" %.2x", start[i]);
+    for (size_t i = 0; i < len; i++) {
+        printf("%.2x ", start[i]);
+    }
     printf("\n"); 
 }
 
 void show_int(int x)
 {
-    show_bytes((byte_pointer) &x, sizeof(int));
+    return show_bytes((byte_pointer)&x, sizeof(int));
 }
 
 void show_float(float x)
 {
-    show_bytes((byte_pointer) &x, sizeof(float));
+    return show_bytes((byte_pointer)&x, sizeof(float));
 }
 
 void show_pointer(void *x)
 {
-    show_bytes((byte_pointer) &x, sizeof(void *));
+    return show_bytes((byte_pointer)&x, sizeof(void *));
 }
 
+void show_endian()
+{
+    int x = 1;
+    byte_pointer byte = (byte_pointer)&x;
+    if (*byte != 1)
+        puts("big");
+    else
+        puts("little");
+    return;
+}
 int main()
 {
     int a = 1;
@@ -37,5 +47,7 @@ int main()
     printf("show pointer %p...\n", p);
     show_pointer(p);
 
+    puts("Check endian...");
+    show_endian();
     return 0;
 }
