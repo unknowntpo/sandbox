@@ -31,22 +31,22 @@ func appendslice(x []int, y ...int) []int {
 //!+append
 func appendInt(x []int, y int) []int {
 
-        var z []int
-        zlen := len(x)+1
-        // set zcap
+	var z []int
+	zlen := len(x) + 1
+	// set zcap
 
-        if zlen <= cap(x) {
+	if zlen <= cap(x) {
 		z = x[:zlen]
 	} else {
-            zcap := zlen
-            // Won't execute if zcap == 1, len(x) == 0 (when x is nil slice)
-            if x != nil {
-                zcap = 2*len(x)
-            }
-            z = make([]int, zlen, zcap)
-            copy(z, x)
-        }
-        z[len(x)] = y
+		zcap := zlen
+		// Won't execute if zcap == 1, len(x) == 0 (when x is nil slice)
+		if x != nil {
+			zcap = 2 * len(x)
+		}
+		z = make([]int, zlen, zcap)
+		copy(z, x)
+	}
+	z[len(x)] = y
 	return z
 }
 
