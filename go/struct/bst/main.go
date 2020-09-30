@@ -1,118 +1,60 @@
 // This code is the practice of bst
-// Ref: [Go by example: Binary Search Tree in Go (Golang)](https://golangbyexample.com/binary-search-tree-in-go/)
-
+// Ref: [Applied Go: A binary search tree](https://appliedgo.net/bintree/)
+// Ref: [My HackMD](https://hackmd.io/@unknowntpo/bst-explain)
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"log"
+)
 
-type bstnode struct {
-	value int
-	left  *bstnode
-	right *bstnode
+type Node struct {
+	Value string
+	Data  string
+	Left  *Node
+	Right *Node
 }
 
-func (b *bstnode) reset() {
-	b.root = nil
-}
+func (n *Node) Insert(value, data string) error {
+	if n == nil {
+		return errors.New("Cannot insert a value into a nil tree")
+	}
 
-func (b *bstnode) insert(value int) {
-	b.insertRec(b.root, value)
-}
+	switch {
 
-// insertRec: recursively search end of node and add new node on it
-func (b *bstnode) insertRec(node *bstnode, value int) *bstnode {
-	if b.root == nil {
-		b.root = &bstnode{
-			value: value,
+	case value == n.Value:
+		return nil
+	case value < n.Value:
+		// go to left node
+		if n.Left == nil {
+			n.Left = &Node{Value: value, Data: data}
+			return nil
 		}
-		return b.root
-	}
-	if node == nil {
-		return &bstnode{value: value}
-	}
-	if value <= node.value {
-		node.left = b.insertRec(node.left, value)
-	} else {
-		node.right = b.insertRec(node.right, value)
-	}
-	return node
-}
-
-func (b *bstnode) find(value int) error {
-	node := b.findRec(b.root, value)
-	if node == nil {
-		return fmt.Errorf("Value: %d not found in tree", value)
+		return n.Left.Insert(value, data)
+	case value > n.Value:
+		// go to right node
+		if n.Right == nil {
+			n.right = &Node{Value: value, Data: data}
+			return nil
+		}
+		return n.Right.Insert(value, data)
 	}
 	return nil
 }
 
-func (b *bstnode) findRec(node *bstnode, value int) *bstnode {
-	if node == nil {
-		return nil
+func (n *Node) Find(s string) (string, bool) {
+	if n == nil {
+		return "", false
 	}
-	if node.value == value {
-		return b.root
-	}
-	if value < node.value {
-		return b.findRec(node.left, value)
-	}
-	return b.findRec(node.right, value)
-
-}
-
-// What does in order mean?
-func (b *bstnode) inorder() {
-	b.inorderRec(b.root)
-}
-
-func (b *bstnode) inorderRec(node *bstnode) {
-	if node != nil {
-		b.inorderRec(node.left)
-		fmt.Println(node.value)
-		b.inorderRec(node.right)
+	switch {
+	case s == n.Value:
+		return n.Data, true
+	case s < n.Value:
+		return n.Left.Find(s)
+	case s > n.Value:
+		return n.Right.Find(s)
 	}
 }
 
-func main() {
-	bst := &bstnode{}
-	eg := []int{2, 5, 7, -1, -1, 5, 5}
-	for _, val := range eg {
-		bst.insert(val)
-	}
-	fmt.Printf("Printing Inorder:\n\b")
-	bst.inorder()
-	bst.reset()
-	eg = []int{4, 5, 7, 6, -1, 99, 5}
-	for _, val := range eg {
-		bst.insert(val)
-	}
-	fmt.Printf("\nPrinting Inorder:\n")
-	bst.inorder()
-	fmt.Printf("\nFinding Values:\n")
-	err := bst.find(2)
-	if err != nil {
-		fmt.Printf("Value %d Not Found\n", 2)
-	} else {
-		fmt.Printf("Value %d Found\n", 2)
-	}
 
-	// Find some value
-	err = bst.find(6)
-	if err != nil {
-		fmt.Printf("Value %d Not Found\n", 6)
-	} else {
-		fmt.Printf("Value %d Found\n", 6)
-	}
-	err = bst.find(5)
-	if err != nil {
-		fmt.Printf("Value %d Not Found\n", 5)
-	} else {
-		fmt.Printf("Value %d Found\n", 5)
-	}
-	err = bst.find(1)
-	if err != nil {
-		fmt.Printf("Value %d Not Found\n", 1)
-	} else {
-		fmt.Printf("Value %d Found\n", 1)
-	}
-}
