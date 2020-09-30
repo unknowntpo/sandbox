@@ -1,6 +1,7 @@
 // This code is the practice of bst
-// Ref: [Applied Go: A binary search tree](https://appliedgo.net/bintree/)
-// Ref: [My HackMD](https://hackmd.io/@unknowntpo/bst-explain)
+// Ref:
+//       - [Applied Go: A binary search tree](https://appliedgo.net/bintree/)
+//       - [My HackMD](https://hackmd.io/@unknowntpo/bst-explain)
 package main
 
 import (
@@ -56,5 +57,3 @@ func (n *Node) Find(s string) (string, bool) {
 		return n.Right.Find(s)
 	}
 }
-
-
