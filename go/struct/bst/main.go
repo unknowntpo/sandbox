@@ -36,7 +36,7 @@ func (n *Node) Insert(value, data string) error {
 	case value > n.Value:
 		// go to right node
 		if n.Right == nil {
-			n.right = &Node{Value: value, Data: data}
+			n.Right = &Node{Value: value, Data: data}
 			return nil
 		}
 		return n.Right.Insert(value, data)
