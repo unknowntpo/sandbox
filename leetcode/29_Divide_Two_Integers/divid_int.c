@@ -14,7 +14,7 @@ int divide(int dividend, int divisor)
     long dvs = (long) abs(divisor);
 
     /* Construct for answer */
-    int sign = (dividend < 0) ^ (divisor < 0);
+    int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
     int ans = 0;
     while (dvd >= dvs) {
         int temp = dvs;
