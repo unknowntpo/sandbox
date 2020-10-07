@@ -91,8 +91,8 @@ int mydivide(int dividend, int divisor)
 }
 
 typedef struct {
-    int a;
-    int b;
+    int dvd;
+    int dvs;
     int want;
 } test_t;
 
@@ -108,22 +108,25 @@ int test()
     int t_size = sizeof(test) / sizeof(test[0]);
     int ans;
     for (int i = 0; i < t_size; i++) {
-        ans = divide(test[i].a, test[i].b);
+        ans = divide(test[i].dvd, test[i].dvs);
         if (ans == test[i].want) {
-            puts("======================== PASS ========================");
-            printf("test case: a = %15d, b = %15d\n", test[i].a, test[i].b);
+            puts("========================== PASS ==========================");
+            printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd,
+                   test[i].dvs);
             printf("result: %d\n", ans);
         } else {
-            puts("======================== FAIL ========================");
-            printf("test case: a = %15d, b = %15d\n", test[i].a, test[i].b);
-            printf("expected :     %15d\n" , test[i].want);
-            printf("get            %15d\n", ans);
+            puts("========================== FAIL ==========================");
+            printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd,
+                   test[i].dvs);
+            printf("expected :       %15d\n", test[i].want);
+            printf("get              %15d\n", ans);
         }
         puts("");
     }
     return 0;
 }
 
-int main() {
+int main()
+{
     test();
 }
