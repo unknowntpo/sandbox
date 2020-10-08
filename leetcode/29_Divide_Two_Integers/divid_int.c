@@ -108,16 +108,18 @@ int test()
     int t_size = sizeof(test) / sizeof(test[0]);
     int ans;
     for (int i = 0; i < t_size; i++) {
+        printf("============================ TEST %d =======================\n",
+               i + 1);
+        printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd, test[i].dvs);
+
         ans = divide(test[i].dvd, test[i].dvs);
         if (ans == test[i].want) {
-            puts("========================== PASS ==========================");
+            puts("PASS");
             printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd,
                    test[i].dvs);
             printf("result: %d\n", ans);
         } else {
-            puts("========================== FAIL ==========================");
-            printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd,
-                   test[i].dvs);
+            puts("FAIL");
             printf("expected :       %15d\n", test[i].want);
             printf("get              %15d\n", ans);
         }
