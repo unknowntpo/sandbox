@@ -15,7 +15,7 @@ void show_bytes(byte_pointer start, size_t size)
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     for (size_t i = size; i > 0; i--)
-        printf("%.2x ", start[i]);
+        printf("%.2x ", start[i - 1]);
 #else
     for (size_t i = 0; i < size; i++)
         printf("%.2x ", start[i]);
