@@ -96,7 +96,6 @@ typedef struct {
     int want;
 } test_t;
 
-
 int test()
 {
     test_t test[] = {{-2147483648, 1, -2147483648},
@@ -114,12 +113,18 @@ int test()
 
         ans = divide(test[i].dvd, test[i].dvs);
         if (ans == test[i].want) {
-            puts("PASS");
+            printf("\033[1;32m");
+            printf("PASS\n");
+            printf("\033[0m");
+
             printf("test case: dvd = %15d, dvs = %15d\n", test[i].dvd,
                    test[i].dvs);
             printf("result: %d\n", ans);
         } else {
-            puts("FAIL");
+            printf("\033[1;31m");
+            printf("FAIL\n");
+            printf("\033[0m");
+
             printf("expected :       %15d\n", test[i].want);
             printf("get              %15d\n", ans);
         }
