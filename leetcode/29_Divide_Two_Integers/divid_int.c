@@ -48,8 +48,8 @@ int divide(int dividend, int divisor)
     show_int(divisor);
 #endif
     /* Cast to long integer for computing */
-    long dvd = (long) abs(dividend);
-    long dvs = (long) abs(divisor);
+    long dvd = (long) labs((long) dividend);
+    long dvs = (long) labs((long) divisor);
 #if DEBUG_ON
     puts("dvd:");
     show_long(dvd);
@@ -58,16 +58,16 @@ int divide(int dividend, int divisor)
 #endif
     /* Construct for answer */
     int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
-    int ans = 0;
+    unsigned int ans = 0;
     while (dvd >= dvs) {
-        int temp = dvs;
-        int count = 1;
+        long temp = dvs;
+        unsigned int count = 1;
         while ((temp << 1) <= dvd) {
             temp <<= 1;
             count <<= 1;
         }
 #if DEBUG_ON
-        printf("temp = %d\t count = %d\t ans = %d\n", temp, count, ans);
+        printf("temp = %ld\t count = %d\t ans = %d\n", temp, count, ans);
 #endif
         dvd -= temp;
         ans += count;
