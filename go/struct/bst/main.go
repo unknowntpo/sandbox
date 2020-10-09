@@ -78,10 +78,14 @@ func (n *Node) replaceNode(parent, replacement *Node) error {
 		return errors.New("replaceNode not allowed on a nil Node")
 	}
 
+	if parent == nil {
+		return errors.New("parent node must not be nil")
+	}
 	if n == parent.Left {
 		parent.Left = replacement
 		return nil
 	}
+
 	parent.Right = replacement
 	return nil
 }
