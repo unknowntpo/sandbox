@@ -92,7 +92,7 @@ func (n *Node) replaceNode(parent, replacement *Node) error {
 // parent must not be nil.
 func (n *Node) Delete(s string, parent *Node) error {
 	if n == nil {
-		errors.New("Value to be deleted does not exist in this tree")
+		return errors.New("cannot delete nil node")
 	}
 
 	// Search the target node
