@@ -71,7 +71,7 @@ int divide(int dividend, int divisor)
         dvd -= temp;
         ans += count;
     }
-    return sign * ans;
+    return sign < 0 ? -ans : ans;
 }
 int mydivide(int dividend, int divisor)
 {
