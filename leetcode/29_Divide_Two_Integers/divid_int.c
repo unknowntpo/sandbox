@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 /* Turn it on to show the verbose output */
-#define DEBUG_ON 1
+#define DEBUG_ON 0
 
 /* Show_byte is the function in CS:APP CH2, showing the binary representation of
  * object */
@@ -38,8 +38,7 @@ void show_int(int a)
 int divide(int dividend, int divisor)
 {
     /* Deal with special condition */
-    if (dividend > INT_MAX || dividend < INT_MIN || divisor > INT_MAX ||
-        divisor < INT_MIN || divisor == 0)
+    if (divisor == 0 || (dividend == INT_MIN && divisor == -1))
         return INT_MAX;
 #if DEBUG_ON
     puts("dividend:");
@@ -99,6 +98,7 @@ typedef struct {
 int test()
 {
     test_t test[] = {{-2147483648, 1, -2147483648},
+                     {-2147483648, -1, 2147483647},
                      {10, 3, 3},
                      {7, -3, -2},
                      {0, 1, 0},
