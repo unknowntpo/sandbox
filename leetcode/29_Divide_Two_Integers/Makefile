@@ -1,6 +1,5 @@
 CC := gcc
-CFLAGS := -g -Wall -Werror
-
+CFLAGS := -g -Wall -Werror -fsanitize=undefined
 all: divid_int
 
 divid_int: divid_int.c

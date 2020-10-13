@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 /* Turn it on to show the verbose output */
-#define DEBUG_ON 0
+#define DEBUG_ON 1
 
 /* Show_byte is the function in CS:APP CH2, showing the binary representation of
  * object */
@@ -34,45 +34,49 @@ void show_int(int a)
 }
 
 
+/* Cpp ver
+ * Ref:
+ * https://leetcode.com/problems/divide-two-integers/discuss/142849/C%2B%2BJavaPython-Should-Not-Use-%22long%22-Int
+ */
+int divide(int A, int B)
+{
+    if (A == INT_MIN && B == -1)
+        return INT_MAX;
+    int a = abs(A), b = abs(B), res = 0;
+    for (int x = 31; x >= 0; x--)
+        if ((signed) ((unsigned) a >> x) - b >= 0)
+            res += 1 << x, a -= b << x;
+    return (A > 0) == (B > 0) ? res : -res;
+}
+#if 0
 /* Actual devide function doing the division operation */
 int divide(int dividend, int divisor)
 {
     /* Deal with special condition */
     if (divisor == 0 || (dividend == INT_MIN && divisor == -1))
         return INT_MAX;
-#if DEBUG_ON
-    puts("dividend:");
-    show_int(dividend);
-    puts("divisor:");
-    show_int(divisor);
-#endif
     /* Cast to long integer for computing */
     long dvd = (long) labs((long) dividend);
     long dvs = (long) labs((long) divisor);
-#if DEBUG_ON
-    puts("dvd:");
-    show_long(dvd);
-    puts("dvs");
-    show_long(dvs);
-#endif
+
     /* Construct for answer */
     int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
     unsigned int ans = 0;
     while (dvd >= dvs) {
-        long temp = dvs;
+        unsigned int temp = dvs;
         unsigned int count = 1;
         while ((temp << 1) <= dvd) {
             temp <<= 1;
             count <<= 1;
         }
-#if DEBUG_ON
-        printf("temp = %ld\t count = %d\t ans = %d\n", temp, count, ans);
-#endif
+        printf("temp = %d\t count = %d\t ans = %d\n", temp, count, ans);
         dvd -= temp;
         ans += count;
     }
     return sign < 0 ? -ans : ans;
 }
+#endif
+
 int mydivide(int dividend, int divisor)
 {
     if (divisor == 0 || (dividend == INT_MIN && divisor == -1))
