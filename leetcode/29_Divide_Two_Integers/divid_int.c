@@ -42,7 +42,11 @@ int divide(int A, int B)
 {
     if (A == INT_MIN && B == -1)
         return INT_MAX;
-    int a = abs(A), b = abs(B), res = 0;
+
+    /* Take abs of a and b, dealed with boundary condition */
+    int a = (A == INT_MIN) ? (unsigned) A : abs(A);
+    int b = (B == INT_MIN) ? (unsigned) B : abs(B);
+    unsigned int res = 0;
     for (int x = 31; x >= 0; x--)
         if ((signed) ((unsigned) a >> x) - b >= 0)
             res += 1 << x, a -= b << x;
