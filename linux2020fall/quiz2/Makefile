@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -g -Werror -Wall
+CFLAGS := -g -Wall
 
 targets := isascii hexchar2val fastdiv
 all: $(targets)
