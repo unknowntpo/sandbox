@@ -1,12 +1,14 @@
 CC := gcc
 CFLAGS := -g -Werror -Wall
 
-targets := isascii hexchar2val
+targets := isascii hexchar2val fastdiv
 all: $(targets)
 
 isascii: isascii.o
 
 hexchar2val: hexchar2val.o
+
+fastdiv: fastdiv.o
 
 .PHONY: clean
 clean:
