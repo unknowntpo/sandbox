@@ -1,8 +1,9 @@
-/* 
+/*
  * isascii: Check if all the elements at an array is ascii character or not
  * Ref:
- *      2020q3 Homework2 (quiz2) Question 1: https://hackmd.io/@sysprog/2020-quiz2
- *      My note: https://hackmd.io/@unknowntpo/quiz2
+ *      2020q3 Homework2 (quiz2) Question 1:
+ * https://hackmd.io/@sysprog/2020-quiz2 My note:
+ * https://hackmd.io/@unknowntpo/quiz2
  */
 
 /* Change to 1 if we want to test non ascii character */
@@ -21,10 +22,10 @@
 /* Define MMM */
 #define MMM 0x8080808080808080
 
-#include <stdio.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 bool is_ascii(const char str[], size_t size)
 {
@@ -34,7 +35,7 @@ bool is_ascii(const char str[], size_t size)
     while ((i + 8) <= size) {
         uint64_t payload;
         memcpy(&payload, str + i, 8);
-        if (payload & 0x8080808080808080) // MMM
+        if (payload & 0x8080808080808080)  // MMM
             return false;
         i += 8;
     }

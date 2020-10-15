@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 #define AAA 3
 #define BBB 6
@@ -19,8 +19,8 @@ int main()
 {
     char a[] = "123456789AaBbCcDdEeFf";
 
-    for(int i = 0; i < strlen(a);i++) 
+    for (int i = 0; i < strlen(a); i++)
         printf("%c %d\n", a[i], hexchar2val(a[i]));
-        
+
     return 0;
 }
