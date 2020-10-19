@@ -70,7 +70,7 @@ bool divisible(uint32_t n)
     return n * M <= M - 1;
 }
 
-int main()
+void test()
 {
     struct timespec tt1, tt2;
     clock_gettime(CLOCK_MONOTONIC, &tt1);
@@ -98,4 +98,10 @@ int main()
 
         printf("%ld, %lld, %lld, %ld, %ld\n", i, time1, time2, ans1, ans2);
     }
+
+}
+int main()
+{
+    printf("quickmod(5) = %d\n", quickmod(5));
+    //test();
 }
