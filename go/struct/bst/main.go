@@ -184,78 +184,79 @@ func (n *Node) Delete(s string, parent *Node) error {
 
 // Pre-Order traverse
 func (t *Tree) Traverse_Pre(n *Node, f func(*Node)) {
-    if n == nil {
-        return
-    }
-    f(n)
-    t.Traverse_Pre(n.Left, f)
-    t.Traverse_Pre(n.Right, f)
+	if n == nil {
+		return
+	}
+	f(n)
+	t.Traverse_Pre(n.Left, f)
+	t.Traverse_Pre(n.Right, f)
 }
 
 // In-Order traverse
 func (t *Tree) Traverse_In(n *Node, f func(*Node)) {
-    if n == nil {
-        return
-    }
-    t.Traverse_In(n.Left, f)
-    f(n)
-    t.Traverse_In(n.Right, f)
+	if n == nil {
+		return
+	}
+	t.Traverse_In(n.Left, f)
+	f(n)
+	t.Traverse_In(n.Right, f)
 }
 
 // Post-Order traverse
 func (t *Tree) Traverse_Post(n *Node, f func(*Node)) {
-    if n == nil {
-        return
-    }
-    t.Traverse_Post(n.Left, f)
-    t.Traverse_Post(n.Right, f)
-    f(n)
+	if n == nil {
+		return
+	}
+	t.Traverse_Post(n.Left, f)
+	t.Traverse_Post(n.Right, f)
+	f(n)
 }
 
 // Level-Order traverse
 func (t *Tree) Traverse_Level(n *Node, f func(*Node)) {
-    if n == nil {
-        return
-    }
-    f(n)
+	if n == nil {
+		return
+	}
+	f(n)
 
-    if n.Left != nil {
-        f(n.Left)
-    }
-    if n.Right != nil {
-        f(n.Right)
-    }
+	if n.Left != nil {
+		f(n.Left)
+	}
+	if n.Right != nil {
+		f(n.Right)
+	}
 
-    t.Traverse_Level(n.Left, f)
-    t.Traverse_Level(n.Right, f)
+	t.Traverse_Level(n.Left, f)
+	t.Traverse_Level(n.Right, f)
 }
 
 // Wrapper function for traversing a tree
 func (t *Tree) Traverse(n *Node, f func(*Node)) {
-    if n == nil {
-        return
-    }
+	if n == nil {
+		return
+	}
 
-    // Pre-Order traverse
-    fmt.Println("Pre order traverse:")
-    t.Traverse_Pre(n, f)
-    fmt.Println()
+	// Pre-Order traverse
+	fmt.Println("Pre order traverse:")
+	t.Traverse_Pre(n, f)
+	fmt.Println()
 
-    // In-Order traverse
-    fmt.Println("In order traverse:")
-    t.Traverse_In(n, f)
-    fmt.Println()
+	// In-Order traverse
+	fmt.Println("In order traverse:")
+	t.Traverse_In(n, f)
+	fmt.Println()
 
-    // Post-Order traverse
-    fmt.Println("Post order traverse")
-    t.Traverse_Post(n, f)
-    fmt.Println()
+	// Post-Order traverse
+	fmt.Println("Post order traverse")
+	t.Traverse_Post(n, f)
+	fmt.Println()
 
-    // Level-Order traverse
-    fmt.Println("Level order traverse")
-    t.Traverse_Level(n, f)
-    fmt.Println()
+	// Level-Order traverse
+	fmt.Println("Level order traverse")
+	t.Traverse_Level(n, f)
+	fmt.Println()
 }
+
 // From go by example: https://golangbyexample.com/binary-search-tree-in-go/
 func (n *Node) inorder() {
 	n.inorderRec(n)
@@ -270,43 +271,43 @@ func (n *Node) inorderRec(node *Node) {
 	}
 }
 func main() {
-        values := []string{"d", "b", "c", "e", "a"}
+	values := []string{"d", "b", "c", "e", "a"}
 	data := []string{"delta", "bravo", "charlie", "echo", "alpha"}
 
-        tree := &Tree{}
-        for i := 0; i < len(values); i++ {
-            err := tree.Insert(values[i], data[i])
-            if err != nil {
-                log.Fatal("Error inserting value `", values[i], "':", err)
-            }
-        }
+	tree := &Tree{}
+	for i := 0; i < len(values); i++ {
+		err := tree.Insert(values[i], data[i])
+		if err != nil {
+			log.Fatal("Error inserting value `", values[i], "':", err)
+		}
+	}
 
-        fmt.Print("Sorted values: | ")
-        tree.Traverse(tree.Root, func(n *Node) { fmt.Print(n.Value, ": ", n.Data, " | ") })
-        fmt.Println()
+	fmt.Print("Sorted values: | ")
+	tree.Traverse(tree.Root, func(n *Node) { fmt.Print(n.Value, ": ", n.Data, " | ") })
+	fmt.Println()
 
-        // Test find
+	// Test find
 
-        s := "d"
-        fmt.Print("Find node '", s, "': ")
-        d, found := tree.Find(s)
-        if !found {
-            log.Fatal("Cannot find '" + s + "'")
-        }
-        fmt.Println("Found " + s + ": '" + d + "'")
+	s := "d"
+	fmt.Print("Find node '", s, "': ")
+	d, found := tree.Find(s)
+	if !found {
+		log.Fatal("Cannot find '" + s + "'")
+	}
+	fmt.Println("Found " + s + ": '" + d + "'")
 
-        // Test deletion
-        s = "d"
-        err := tree.Delete(s)
-        if err != nil {
-            log.Fatal("Error deleting "+s+": ", err)
-        }
-        fmt.Print("After deleting '" + s + "': ")
-        tree.Traverse(tree.Root, func(n *Node) { fmt.Print(n.Value, ": ", n.Data, " | ") })
-        fmt.Println()
+	// Test deletion
+	s = "d"
+	err := tree.Delete(s)
+	if err != nil {
+		log.Fatal("Error deleting "+s+": ", err)
+	}
+	fmt.Print("After deleting '" + s + "': ")
+	tree.Traverse(tree.Root, func(n *Node) { fmt.Print(n.Value, ": ", n.Data, " | ") })
+	fmt.Println()
 
-        // Test for single node tree
-        fmt.Println("Single-node tree")
+	// Test for single node tree
+	fmt.Println("Single-node tree")
 	tree = &Tree{}
 
 	tree.Insert("a", "alpha")
@@ -319,18 +320,18 @@ func main() {
 	tree.Traverse(tree.Root, func(n *Node) { fmt.Print(n.Value, ": ", n.Data, " | ") })
 	fmt.Println()
 
-// Node level operation Demo
-/*
-	values := []string{"d", "b", "c", "e", "a"}
-	data := []string{"delta", "bravo", "charlie", "echo", "alpha"}
-	root := &Node{}
-	for i := 0; i < len(values); i++ {
-		err := root.Insert(values[i], data[i])
-		if err != nil {
-			log.Fatal("Error inserting value '", values[i], "': ", err)
+	// Node level operation Demo
+	/*
+		values := []string{"d", "b", "c", "e", "a"}
+		data := []string{"delta", "bravo", "charlie", "echo", "alpha"}
+		root := &Node{}
+		for i := 0; i < len(values); i++ {
+			err := root.Insert(values[i], data[i])
+			if err != nil {
+				log.Fatal("Error inserting value '", values[i], "': ", err)
+			}
 		}
-	}
-	fmt.Print("Sorted values: | ")
-	root.inorder()
-*/
+		fmt.Print("Sorted values: | ")
+		root.inorder()
+	*/
 }
