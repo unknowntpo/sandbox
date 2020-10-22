@@ -10,6 +10,9 @@ hexchar2val: hexchar2val.o
 
 fastdiv: fastdiv.o
 
+plotisascii: isascii scripts/plot.py 
+	./isascii > plot/out.txt
+	python3 scripts/plot.py
 .PHONY: clean
 clean:
 	-rm -f *.o $(targets) 
