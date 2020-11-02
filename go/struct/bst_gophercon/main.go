@@ -34,14 +34,26 @@ func (t *Tree) Insert(key int) {
 	t.root.Insert(key)
 	return
 }
+
+// Node level insert method
+// Because we can't apply (*Node).Insert() on a nil node
+// so if n is nil, simply return
 func (n *Node) Insert(key int) {
 	if n == nil {
-		n = &Node{Key: key, Left: nil, Right: nil}
+		return
 	}
 	if key < n.Key {
+		if n.Left == nil {
+			n.Left = &Node{Key: key, Left: nil, Right: nil}
+			return
+		}
 		n.Left.Insert(key)
 		return
 	} else if key > n.Key {
+		if n.Right == nil {
+			n.Right = &Node{Key: key, Left: nil, Right: nil}
+			return
+		}
 		n.Right.Insert(key)
 		return
 	}
