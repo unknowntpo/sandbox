@@ -12,6 +12,21 @@ type Tree struct {
 	root *Node
 }
 
+// Tree level Search() method
+// Display the result of node level Search method
+func (t *Tree) Search(key int) {
+	if t.root == nil {
+		fmt.Println("Can't search key in nil tree")
+		return
+	}
+	found := t.root.Search(key)
+	if found {
+		fmt.Println(key, "is found!")
+	} else {
+		fmt.Println(key, "does not found!")
+	}
+	return
+}
 func (n *Node) Search(key int) bool {
 	// key not found
 	if n == nil {
@@ -26,19 +41,20 @@ func (n *Node) Search(key int) bool {
 	return true
 }
 
+// Tree level insert method
 func (t *Tree) Insert(key int) {
 	if t.root == nil {
 		t.root = &Node{key, nil, nil}
 		return
 	}
-	t.root.Insert(key)
+	t.root.insert(key)
 	return
 }
 
 // Node level insert method
-// Because we can't apply (*Node).Insert() on a nil node
+// Because we can't apply (*Node).insert() on a nil node
 // so if n is nil, simply return
-func (n *Node) Insert(key int) {
+func (n *Node) insert(key int) {
 	if n == nil {
 		return
 	}
@@ -47,27 +63,43 @@ func (n *Node) Insert(key int) {
 			n.Left = &Node{Key: key, Left: nil, Right: nil}
 			return
 		}
-		n.Left.Insert(key)
+		n.Left.insert(key)
 		return
 	} else if key > n.Key {
 		if n.Right == nil {
 			n.Right = &Node{Key: key, Left: nil, Right: nil}
 			return
 		}
-		n.Right.Insert(key)
+		n.Right.insert(key)
 		return
 	}
 	// key == n.Key, node already exist, no need to do anything
 }
 
-// Delete method search for target to delete,
-// and return the new node for replacement of the node we just deleted
-func (n *Node) Delete(key int) *Node {
+func (t *Tree) Remove(key int) {
+	if t == nil {
+		// Can't apply Remove method on a nil tree
+		return
+	}
+	if t.root == nil {
+		// Can't apply Remove method on a nil tree
+		return
+	}
+	t.root = t.root.remove(key)
+	return
+}
+
+// Remove method search for target to remove,
+// and return the new node for replacement of the node we just removed
+func (n *Node) remove(key int) *Node {
 	// Search for target
+	if n == nil {
+		return n
+	}
 	if key < n.Key {
-		n.Left = n.Left.Delete(key)
+		n.Left = n.Left.remove(key)
 	} else if key > n.Key {
-		n.Right = n.Right.Delete(key)
+		n.Right = n.Right.remove(key)
 	} else {
 		// found the target
 		// Determine the delete method
@@ -81,42 +113,72 @@ func (n *Node) Delete(key int) *Node {
 		// If we reach here, means n is an internal node
 		// Find the Min number of node at n's right subtree
 		// to replace the position of n
-		min := n.Right.Min()
+		minKey := n.Right.min()
 
-		n.Key = min
-		n.Right = n.Right.Delete(min)
+		n.Key = minKey
+		// Remove the minKey
+		n.Right = n.Right.remove(minKey)
 	}
 	return n
 }
 
 // Return the key of minimum node at root n
-func (n *Node) Min() int {
-	if n.Right == nil {
+func (n *Node) min() int {
+	if n.Left == nil {
 		return n.Key
 	} else {
-		return n.Left.Min()
+		return n.Left.min()
 	}
 }
 
-// Show the tree given different method of traversing
-// TODO: How to use function value for pre, in, post order traversal?
-func (n *Node) Show() {
-	if n != nil {
-		n.Left.Show()
-		fmt.Printf("%d ", n.Key)
-		n.Right.Show()
+// Tree level Show() method
+func (t *Tree) Show() {
+	if t.root != nil {
+		t.root.showInOrder()
+		fmt.Println()
+		return
+	}
+}
 
+// Node level showInOrder() method
+// Show the tree using in-order traversal
+// TODO: How to use function value for pre, in, post order traversal?
+func (n *Node) showInOrder() {
+	if n != nil {
+		n.Left.showInOrder()
+		fmt.Printf("%d ", n.Key)
+		n.Right.showInOrder()
 	}
 }
 func main() {
+	// TODO: Write a test for every operation
 	// Define our nil root tree
 	t := &Tree{nil}
-	t.Insert(5)
-	t.Insert(3)
-	t.Insert(7)
-	t.Insert(2)
-	t.Insert(4)
-	t.Insert(6)
-	t.Insert(8)
-	t.root.Show()
+	keys := []int{5, 3, 7, 2, 4, 6, 8}
+	for _, key := range keys {
+		t.Insert(key)
+	}
+
+	// Show the tree
+	t.Show()
+
+	// Search the key that exist in tree
+	t.Search(3)
+	t.Search(4)
+	t.Search(10)
+
+	// Delte the key 5
+	fmt.Println("rm 5")
+	t.Remove(5)
+	t.Show()
+	fmt.Println("rm 3")
+	t.Remove(3)
+	t.Show()
+	fmt.Println("rm 4")
+	t.Remove(4)
+	for _, key := range keys {
+		fmt.Println("rm ", key)
+		t.Remove(key)
+		t.Show()
+	}
 }
