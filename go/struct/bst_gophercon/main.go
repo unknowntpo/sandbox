@@ -47,7 +47,8 @@ func (t *Tree) Insert(key int) {
 		t.root = &Node{key, nil, nil}
 		return
 	}
-	t.root.insert(key)
+	t.root.insertIter(key)
+	//t.root.insert(key)
 	return
 }
 
@@ -76,6 +77,26 @@ func (n *Node) insert(key int) {
 	// key == n.Key, node already exist, no need to do anything
 }
 
+// Implement insert using iteration
+func (n *Node) insertIter(key int) {
+	for p := n; p != nil; {
+		if key < p.Key {
+			if p.Left == nil {
+				p.Left = &Node{Key: key, Left: nil, Right: nil}
+				return
+			}
+			p = p.Left
+		} else if key > p.Key {
+			if p.Right == nil {
+				p.Right = &Node{Key: key, Left: nil, Right: nil}
+				return
+			}
+			p = p.Right
+		}
+		// if key == n.Key, do nothing
+	}
+	return
+}
 func (t *Tree) Remove(key int) {
 	if t == nil {
 		// Can't apply Remove method on a nil tree
@@ -160,6 +181,7 @@ func main() {
 	}
 
 	// Show the tree
+	fmt.Println("Tree after Insert", keys, ":")
 	t.Show()
 
 	// Search the key that exist in tree
