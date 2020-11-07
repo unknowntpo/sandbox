@@ -22,3 +22,23 @@ func TestFibRegister(t *testing.T) {
 		}
 	}
 }
+
+var fibNum int = 50
+
+func BenchmarkFibNormal(b *testing.B) {
+	//fibRegister(fibNum, "it")
+	result := fibNormal(fibNum)
+	b.Logf("fib normal: fib[%d] = %d", fibNum, result)
+}
+
+func BenchmarkFibRecTail(b *testing.B) {
+	result := fibRecTail(fibNum, 0, 1)
+	b.Logf("fib rec tail: fib[%d] = %d", fibNum, result)
+}
+func BenchmarkFibIter(b *testing.B) {
+	result := fibIter(fibNum)
+	b.Logf("fib rec tail: fib[%d] = %d", fibNum, result)
+}
+
+//fibRegister(i, "nr")
+//fibRegister(i, "tr")
