@@ -27,17 +27,23 @@ var fibNum int = 50
 
 func BenchmarkFibNormal(b *testing.B) {
 	//fibRegister(fibNum, "it")
-	result := fibNormal(fibNum)
-	b.Logf("fib normal: fib[%d] = %d", fibNum, result)
+	// package level variable vs. _ ?
+	for i := 0; i < b.N; i++ {
+		_ = fibNormal(fibNum)
+	}
 }
 
 func BenchmarkFibRecTail(b *testing.B) {
-	result := fibRecTail(fibNum, 0, 1)
-	b.Logf("fib rec tail: fib[%d] = %d", fibNum, result)
+	for i := 0; i < b.N; i++ {
+		_ = fibRecTail(fibNum, 0, 1)
+	}
+
 }
 func BenchmarkFibIter(b *testing.B) {
-	result := fibIter(fibNum)
-	b.Logf("fib rec tail: fib[%d] = %d", fibNum, result)
+	for i := 0; i < b.N; i++ {
+		_ = fibIter(fibNum)
+
+	}
 }
 
 //fibRegister(i, "nr")
