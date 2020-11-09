@@ -152,10 +152,13 @@ func (n *Node) min() int {
 	}
 }
 
+// Define the function signature of function that passed in to (*Tree).Show()
+type ShowFunc func(int)
+
 // Tree level Show() method
-func (t *Tree) Show() {
+func (t *Tree) Show(f ShowFunc) {
 	if t.root != nil {
-		t.root.showInOrder()
+		t.root.showInOrder(f)
 		fmt.Println()
 		return
 	}
@@ -164,11 +167,11 @@ func (t *Tree) Show() {
 // Node level showInOrder() method
 // Show the tree using in-order traversal
 // TODO: How to use function value for pre, in, post order traversal?
-func (n *Node) showInOrder() {
+func (n *Node) showInOrder(f ShowFunc) {
 	if n != nil {
-		n.Left.showInOrder()
-		fmt.Printf("%d ", n.Key)
-		n.Right.showInOrder()
+		n.Left.showInOrder(f)
+		f(n.Key)
+		n.Right.showInOrder(f)
 	}
 }
 func main() {
@@ -182,25 +185,22 @@ func main() {
 
 	// Show the tree
 	fmt.Println("Tree after Insert", keys, ":")
-	t.Show()
+	t.Show(func(key int) {
+		fmt.Printf("%d ", key)
+	})
 
 	// Search the key that exist in tree
 	t.Search(3)
 	t.Search(4)
 	t.Search(10)
 
-	// Delte the key 5
-	fmt.Println("rm 5")
-	t.Remove(5)
-	t.Show()
-	fmt.Println("rm 3")
-	t.Remove(3)
-	t.Show()
-	fmt.Println("rm 4")
-	t.Remove(4)
+	// Remove all keys
+	fmt.Println("Remove all keys...")
 	for _, key := range keys {
 		fmt.Println("rm ", key)
 		t.Remove(key)
-		t.Show()
+		t.Show(func(key int) {
+			fmt.Printf("%d ", key)
+		})
 	}
 }
