@@ -5,10 +5,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"text/template"
 )
 
 // Get single user from reqres.in
 const UserURL = "https://reqres.in/api/users/2"
+const tmpl = `---------------------------------
+ID: {{.Data.Id}}
+Email: {{.Data.Email}}
+Name: {{.Data.FirstName}} {{.Data.LastName}}
+Avatar: {{.Data.Avatar}}
+Company: {{.Ad.Company}}
+Url: {{.Ad.Url}}
+Text: {{.Ad.Text}}
+`
 
 type UserResult struct {
 	Data *Data `json:"data"`
@@ -16,17 +27,17 @@ type UserResult struct {
 }
 
 type Data struct {
-	Id         int    `json:"id"`
-	Email      string `json:"email"`
-	FirstNname string `json:"first_name"`
-	LastNname  string `json:"last_name"`
-	Avatar     string `json:"avatar"`
+	Id        int    `json:"id"`
+	Email     string `json:"email"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Avatar    string `json:"avatar"`
 }
 
 type Ad struct {
-	Company string
-	Url     string
-	Text    string
+	Company string `json:"company"`
+	Url     string `json:"url"`
+	Text    string `json:"text"`
 }
 
 func SearchUser() (*UserResult, error) {
@@ -49,11 +60,19 @@ func SearchUser() (*UserResult, error) {
 	return &result, nil
 }
 
+func check(e error) {
+	if e != nil {
+		log.Fatal(e)
+	}
+}
 func main() {
 	result, err := SearchUser()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v\n", result.Data)
-	fmt.Printf("%+v\n", result.Ad)
+	//Debug output
+	//fmt.Printf("%+v\n", result.Data)
+	//fmt.Printf("%+v\n", result.Ad)
+	t := template.Must(template.New("t1").Parse(tmpl))
+	check(t.Execute(os.Stdout, result))
 }
