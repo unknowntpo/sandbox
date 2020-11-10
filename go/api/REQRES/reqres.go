@@ -10,20 +10,23 @@ import (
 )
 
 // Get single user from reqres.in
-const UserURL = "https://reqres.in/api/users/2"
-const tmpl = `---------------------------------
-ID: {{.Data.Id}}
-Email: {{.Data.Email}}
-Name: {{.Data.FirstName}} {{.Data.LastName}}
-Avatar: {{.Data.Avatar}}
-Company: {{.Ad.Company}}
+const UserURL = "https://reqres.in/api/users?per_page=20"
+const tmpl = `Company: {{.Ad.Company}}
 Url: {{.Ad.Url}}
 Text: {{.Ad.Text}}
+
+Employee's data:
+{{range .Data}}---------------------------------
+ID: {{.Id}}
+Email: {{.Email}}
+Name: {{.FirstName}} {{.LastName}}
+Avatar: {{.Avatar}}
+{{end}}
 `
 
 type UserResult struct {
-	Data *Data `json:"data"`
-	Ad   *Ad   `json:"ad"`
+	Data *[]Data `json:"data"`
+	Ad   *Ad     `json:"ad"`
 }
 
 type Data struct {
