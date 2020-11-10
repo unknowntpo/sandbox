@@ -15,6 +15,10 @@ type Tree struct {
 // Tree level Search() method
 // Display the result of node level Search method
 func (t *Tree) Search(key int) {
+	if t == nil {
+		// TODO: Can't apply Insert method on nil pointer receiver, use error to handle it
+		return
+	}
 	if t.root == nil {
 		fmt.Println("Can't search key in nil tree")
 		return
@@ -43,6 +47,10 @@ func (n *Node) Search(key int) bool {
 
 // Tree level insert method
 func (t *Tree) Insert(key int) {
+	if t == nil {
+		// TODO: Can't apply Insert method on nil pointer receiver, use error to handle it
+		return
+	}
 	if t.root == nil {
 		t.root = &Node{key, nil, nil}
 		return
@@ -157,6 +165,10 @@ type ShowFunc func(int)
 
 // Tree level Show() method
 func (t *Tree) Show(f ShowFunc) {
+	if t == nil {
+		// TODO: Can't apply Insert method on nil pointer receiver, use error to handle it
+		return
+	}
 	if t.root != nil {
 		t.root.showInOrder(f)
 		fmt.Println()
@@ -177,6 +189,8 @@ func (n *Node) showInOrder(f ShowFunc) {
 func main() {
 	// TODO: Write a test for every operation
 	// Define our nil root tree
+	// Why this line cause panic? -> not handle nil method pointer receiver
+	//var t *Tree
 	t := &Tree{nil}
 	keys := []int{5, 3, 7, 2, 4, 6, 8}
 	for _, key := range keys {
