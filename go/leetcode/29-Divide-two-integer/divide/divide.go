@@ -103,3 +103,25 @@ func divide(dividend int32, divisor int32) int32 {
 		return int32(ans)
 	}
 }
+
+func normalDivide(dividend, divisor int32) int32 {
+	// special case: -2^31 / 1
+	if dividend == math.MinInt32 && divisor == 1 {
+		return math.MinInt32
+	}
+
+	// special case: -2^31 / -1
+	if dividend == math.MinInt32 && divisor == -1 {
+		return math.MaxInt32
+	}
+	//return dividend / divisor
+	var dvd uint32 = abs32(dividend)
+	var dvs uint32 = abs32(divisor)
+
+	if (dividend < 0) != (divisor < 0) {
+		return -int32(dvd / dvs)
+	} else {
+		return int32(dvd / dvs)
+	}
+
+}
