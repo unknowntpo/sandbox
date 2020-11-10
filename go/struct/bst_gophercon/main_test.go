@@ -1,35 +1,63 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 /*
 Package, go doc support
 */
 
-func TestMain(t *testing.T) {
-	// run test for all method
-
+// Helper function for filling the tree by given test slice
+func (tree *Tree) fillTree(keys []int) {
+	for _, key := range keys {
+		tree.Insert(key)
+	}
 }
 
-/* Sample testing workflow
-func main() {
-	// TODO: Write a test for every operation
-	// Define our nil root tree
-	t := &Tree{nil}
-	t.Insert(5)
-	t.Insert(3)
-	t.Insert(7)
-	t.Insert(2)
-	t.Insert(4)
-	t.Insert(6)
-	t.Insert(8)
-
-	// Show the tree
-	t.Show()
-
-	// Search the key that exist in tree
-	t.Search(3)
-	t.Search(4)
-	t.Search(10)
+// Helper function for checking if the input slices are the same
+// Return true if a, b are the same.
+// Also return true if a, b are all nil slices
+// Return false if a, b are not the same.
+// Ref: https://flaviocopes.com/golang-data-structure-binary-search-tree/
+func isSameSlice(a, b []int) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	if len(a) != len(b) {
+		return false
+	}
+	for i, _ := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }
-*/
+
+func TestShow(t *testing.T) {
+	var tests = []struct {
+		keys []int
+		want []int
+	}{
+		{[]int{5, 3, 7, 2, 4, 6, 8}, []int{2, 3, 4, 5, 6, 7, 8}},
+	}
+
+	for _, test := range tests {
+		var tree = &Tree{nil}
+		tree.fillTree(test.keys)
+
+		// Traverse the tree and append the elements into slice
+		var result []int
+		tree.Show(func(key int) {
+			result = append(result, key)
+		})
+		// Check if the result are the same slice as we wanted
+		if !isSameSlice(result, test.want) {
+			t.Errorf("In order traverse incorrect, get %d, want %d", result, test.want)
+		}
+	}
+}
