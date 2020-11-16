@@ -3,22 +3,20 @@ package main
 import (
 	"fmt"
 	"golang.org/x/net/html"
-	"net/http"
 	"os"
+	"strings"
 )
 
-// Fetch the url in or.Args[1]
-// And return the resp as type of *http.Response
-func fetch() *http.Response {
-	url := os.Args[1]
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
-		os.Exit(1)
-	}
-
-	return resp
-}
+const s = `
+<html>
+    <head>
+	<title>Example HTML </title>
+    </head>
+    <body>
+	<h1>Hello world</h1>
+	<h2>Sub head </h2>
+    </body>
+</html>`
 
 func outline(stack []string, n *html.Node) {
 	if n.Type == html.ElementNode {
@@ -30,19 +28,13 @@ func outline(stack []string, n *html.Node) {
 		outline(stack, c)
 	}
 }
+
 func main() {
-	// handle cmd arg.
-	if len(os.Args) != 2 {
-		fmt.Fprintf(os.Stderr, "Usage: ./outline1 <URL>\n")
-		os.Exit(1)
-	}
-	resp := fetch()
-	doc, err := html.Parse(resp.Body)
+	doc, err := html.Parse(strings.NewReader(s))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "outline1: %v\n", err)
 		os.Exit(1)
 	}
-	defer resp.Body.Close()
 
 	// Display the html DOM tree
 	outline(nil, doc)
