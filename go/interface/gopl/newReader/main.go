@@ -3,8 +3,30 @@ package main
 import (
 	"fmt"
 	"golang.org/x/net/html"
-	"strings"
+	"io"
+	//"strings"
 )
+
+type StringReader struct {
+	s string
+	i int64 // index of current position of reading at s
+}
+
+// NewReader returns a new Reader reading from s
+func NewReader(s string) *StringReader {
+	return &StringReader{s, 0}
+}
+
+// Implement Read method, and it will become a io.Reader
+func (r *StringReader) Read(p []byte) (n int, err error) {
+	if r.i >= int64(len(r.s)) {
+		return 0, io.EOF
+	}
+	n = copy(p, r.s[r.i:])
+	fmt.Println(n)
+	r.i += int64(n)
+	return
+}
 
 const s = `
 <html>
@@ -21,7 +43,9 @@ func main() {
 	outline(s)
 }
 func outline(s string) error {
-	doc, err := html.Parse(strings.NewReader(s))
+	// Implement my own string.NewReader function
+	doc, err := html.Parse(NewReader(s))
+	//doc, err := html.Parse(strings.NewReader(s))
 	if err != nil {
 		return err
 	}
@@ -61,9 +85,6 @@ func startElement(n *html.Node) {
 		// What does %*s do?
 		fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
 		depth++
-	}
-	if n.Type == html.TextNode {
-		fmt.Printf("%*s<%s>\n", depth*2, "", "Text")
 	}
 }
 
