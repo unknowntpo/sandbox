@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+const indent = 4
 const s = `
 <html>
     <head>
@@ -59,11 +60,22 @@ var depth int
 func startElement(n *html.Node) {
 	if n.Type == html.ElementNode {
 		// What does %*s do?
-		fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
+		fmt.Printf("%*s<%s>\n", depth*indent, "", n.Data)
 		depth++
 	}
 	if n.Type == html.TextNode {
-		fmt.Printf("%*s<%s>\n", depth*2, "", "Text")
+		// Control the indent
+		fmt.Printf("%*s", depth*indent, "")
+		for _, ele := range n.Data {
+			if ele == '\n' {
+				fmt.Printf("\\n")
+			} else if ele == '\t' {
+				fmt.Printf("\\t")
+			} else {
+				fmt.Print(string(ele))
+			}
+		}
+		depth++
 	}
 }
 
@@ -71,6 +83,10 @@ func endElement(n *html.Node) {
 	if n.Type == html.ElementNode {
 		depth--
 		// What does %*s do?
-		fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+		fmt.Printf("%*s</%s>\n", depth*indent, "", n.Data)
+	}
+	if n.Type == html.TextNode {
+		depth--
+		fmt.Println()
 	}
 }
