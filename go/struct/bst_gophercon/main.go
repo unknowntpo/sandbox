@@ -2,6 +2,9 @@ package main
 
 import "fmt"
 
+const indent = 4
+const format = "--<"
+
 type Node struct {
 	Key   int
 	Left  *Node
@@ -186,6 +189,45 @@ func (n *Node) showInOrder(f ShowFunc) {
 		n.Right.showInOrder(f)
 	}
 }
+
+//Print CLI readable format of tree
+// Ref: [Go Data Structure: Binary Search Tree](https://flaviocopes.com/golang-data-structure-binary-search-tree/)
+func (t *Tree) String() {
+	if t == nil {
+		return
+	}
+
+	// Init the depth
+	depth = 0
+	fmt.Println("--------------------------")
+	if t.root != nil {
+		stringify(t.root, func(key int) {
+			fmt.Printf("%*s%d%s\n", depth*indent, "", key, format)
+		})
+	}
+	fmt.Println("--------------------------")
+
+	// Reset the depth
+	depth = 0
+}
+
+var depth int
+
+// Internal function to print the tree structure
+func stringify(n *Node, f ShowFunc) {
+	if n == nil {
+		depth++
+		fmt.Printf("%*sX\n", depth*indent, "")
+		depth--
+		return
+	} else {
+		depth++
+		stringify(n.Left, f)
+		f(n.Key)
+		stringify(n.Right, f)
+		depth--
+	}
+}
 func main() {
 	// TODO: Write a test for every operation
 	// Define our nil root tree
@@ -208,6 +250,10 @@ func main() {
 	t.Search(4)
 	t.Search(10)
 
+	// Show CLI readable tree structure
+	fmt.Println("Show CLI readable tree structure...")
+	t.String()
+
 	// Remove all keys
 	fmt.Println("Remove all keys...")
 	for _, key := range keys {
@@ -217,4 +263,5 @@ func main() {
 			fmt.Printf("%d ", key)
 		})
 	}
+
 }
