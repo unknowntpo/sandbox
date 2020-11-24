@@ -21,6 +21,7 @@ type Issue struct {
 	Body      string    // in Markdown format
 }
 type User struct {
-	Login   string
-	HTMLURL string `json:"html_url"`
+	Login     string
+	AvatarURL string `json:avatar_url`
+	HTMLURL   string `json:"html_url"`
 }
