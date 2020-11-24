@@ -12,7 +12,6 @@ type Circle struct {
 }
 
 type Shape interface {
-	Perimeter() float64
 	Area() float64
 }
 
