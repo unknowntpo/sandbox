@@ -2,27 +2,27 @@ package wallet
 
 import "testing"
 
+func assertBalance(t *testing.T, got, want Bitcoin) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %s want %s", got, want)
+	}
+}
+
+func assertError(t *testing.T, got error, want error) {
+	t.Helper()
+	if got == nil {
+		t.Fatal("Error expected, but got nothing")
+	}
+
+	if got != want {
+		t.Errorf("got %q, want %q", got, want)
+	} else {
+		t.Log("Error message is handled correctly")
+	}
+}
+
 func TestWallet(t *testing.T) {
-	assertBalance := func(t *testing.T, got, want Bitcoin) {
-		t.Helper()
-		if got != want {
-			t.Errorf("got %s want %s", got, want)
-		}
-
-	}
-	assertError := func(t *testing.T, got error, want string) {
-		t.Helper()
-		if got == nil {
-			t.Fatal("Error expected, but got nothing")
-		}
-
-		if got.Error() != want {
-			t.Errorf("got %q, want %q", got, want)
-		} else {
-			t.Log("Error message is handled correctly")
-		}
-	}
-
 	t.Run("Deposit", func(t *testing.T) {
 		wallet := Wallet{balance: Bitcoin(10)}
 		wallet.Deposit(Bitcoin(10))
@@ -53,7 +53,7 @@ func TestWallet(t *testing.T) {
 
 		assertBalance(t, got, want)
 		// Intended fail, check if error is triggered correctly
-		assertError(t, err, "cannot withdraw, insufficient funds")
+		assertError(t, err, ErrInsufficientFunds)
 	})
 
 }
