@@ -24,6 +24,11 @@ func bubbleSort(in []int) []int {
 // input: an integer slice
 // output: an sorted integer slice
 func mergeSort(in []int) []int {
+	if in == nil {
+		return nil
+	} else if len(in) <= 1 {
+		return in
+	}
 	// split
 	mid := len(in) / 2
 	left := mergeSort(in[:mid])
@@ -33,7 +38,6 @@ func mergeSort(in []int) []int {
 }
 
 // Merge two sorted slice
-// TODO: Will merge get empty slice?
 func merge(left, right []int) []int {
 	if left == nil && right == nil {
 		return []int(nil)

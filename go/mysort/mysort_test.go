@@ -7,25 +7,37 @@ import (
 	"testing"
 )
 
+var testSort = []struct {
+	name string
+	in   []int
+	want []int
+}{
+	{"nil slice", nil, nil},           // test for nil slice
+	{"empty slice", []int{}, []int{}}, // test for empty slice
+	{"normal slice", []int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}},
+	{"zero value slice", []int{0, 0, 0, 0, 0}, []int{0, 0, 0, 0, 0}},
+	{"normal slice - 2", []int{5, 2, 2, 3, 1}, []int{1, 2, 2, 3, 5}},
+}
+
 func TestBubbleSort(t *testing.T) {
-	var tests = []struct {
-		name string
-		in   []int
-		want []int
-	}{
-		{"nil slice", nil, nil},           // test for nil slice
-		{"empty slice", []int{}, []int{}}, // test for empty slice
-		{"normal slice", []int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}},
-		{"zero value slice", []int{0, 0, 0, 0, 0}, []int{0, 0, 0, 0, 0}},
-		{"normal slice - 2", []int{5, 2, 2, 3, 1}, []int{1, 2, 2, 3, 5}},
-	}
-	for _, tt := range tests {
+	for _, tt := range testSort {
 		t.Run(tt.name, func(t *testing.T) {
 			if ans := bubbleSort(tt.in); !(sort.IntsAreSorted(ans) && reflect.DeepEqual(ans, tt.want)) {
 				t.Errorf("Slice is not sorted or answer not correct, get %v, want %v\n", ans, tt.want)
 			}
 		})
 	}
+}
+
+func TestMergeSort(t *testing.T) {
+	for _, tt := range testSort {
+		t.Run(tt.name, func(t *testing.T) {
+			if ans := mergeSort(tt.in); !(sort.IntsAreSorted(ans) && reflect.DeepEqual(ans, tt.want)) {
+				t.Errorf("Slice is not sorted or answer not correct, get %v, want %v\n", ans, tt.want)
+			}
+		})
+	}
+
 }
 
 // Test for merging two sorted slice
