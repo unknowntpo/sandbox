@@ -61,25 +61,52 @@ func TestMerge(t *testing.T) {
 	}
 }
 
-func BenchmarkBubbleSort5Ele(b *testing.B) {
-	var in = []int{5, 4, 3, 2, 1}
-	for i := 0; i < b.N; i++ {
-		_ = bubbleSort(in)
-	}
+func BenchmarkBubbleSort(b *testing.B) {
+	b.Run("Bench slice with 5 elements", func(b *testing.B) {
+		var in = []int{5, 4, 3, 2, 1}
+		for i := 0; i < b.N; i++ {
+			_ = bubbleSort(in)
+		}
+	})
+
+	b.Run("Bench slice with 1000 elements", func(b *testing.B) {
+		var in []int
+		var size int
+
+		size = 1000
+		in = make([]int, 1000)
+		for i := 0; i < size; i++ {
+			in[i] = rand.Int() % 50
+		}
+		// reset timer before actual bench
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = bubbleSort(in)
+		}
+	})
 }
 
-func BenchmarkBubbleSort1000Ele(b *testing.B) {
-	var in []int
-	var size int
+func BenchmarkMergeSort(b *testing.B) {
+	b.Run("Bench slice with 5 elements", func(b *testing.B) {
+		var in = []int{5, 4, 3, 2, 1}
+		for i := 0; i < b.N; i++ {
+			_ = mergeSort(in)
+		}
+	})
 
-	size = 1000
-	in = make([]int, 1000)
-	for i := 0; i < size; i++ {
-		in[i] = rand.Int() % 50
-	}
-	// reset timer before actual bench
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_ = bubbleSort(in)
-	}
+	b.Run("Bench slice with 1000 elements", func(b *testing.B) {
+		var in []int
+		var size int
+
+		size = 1000
+		in = make([]int, 1000)
+		for i := 0; i < size; i++ {
+			in[i] = rand.Int() % 50
+		}
+		// reset timer before actual bench
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = mergeSort(in)
+		}
+	})
 }
