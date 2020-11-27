@@ -110,3 +110,30 @@ func BenchmarkMergeSort(b *testing.B) {
 		}
 	})
 }
+
+func BenchmarkMerge(b *testing.B) {
+	b.Run("Bench slice with 5 elements", func(b *testing.B) {
+		var left = []int{1, 2, 3, 4, 5}
+		var right = []int{1, 2, 3, 4, 5}
+		for i := 0; i < b.N; i++ {
+			_ = merge(left, right)
+		}
+	})
+
+	b.Run("Bench slice with 1000 elements", func(b *testing.B) {
+		var size int
+
+		size = 1000
+		left := make([]int, 1000)
+		right := make([]int, 1000)
+		for i := 0; i < size; i++ {
+			left[i] = i
+			right[i] = i + 1
+		}
+		// reset timer before actual bench
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = merge(left, right)
+		}
+	})
+}
