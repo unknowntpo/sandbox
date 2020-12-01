@@ -16,7 +16,7 @@ func main() {
 func spinner(delay time.Duration) {
 	for {
 		// back quote v.s single quote double quote?
-		for _, r := range `-/|\` {
+		for _, r := range "-/|\"" {
 			fmt.Printf("\r%c", r)
 			time.Sleep(delay)
 		}
