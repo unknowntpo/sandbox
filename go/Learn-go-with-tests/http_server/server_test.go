@@ -12,6 +12,7 @@ func TestGETPlayers(t *testing.T) {
 		map[string]int{
 			"Pepper": 20,
 			"Floyd":  10,
+			"MMD":    0,
 		},
 	}
 	server := &PlayerServer{&store}
@@ -46,6 +47,17 @@ func TestGETPlayers(t *testing.T) {
 
 		assertStatus(t, resp.Code, http.StatusNotFound)
 	})
+
+	t.Run("returns statusCode 200 and score 0 on existing players with score 0", func(t *testing.T) {
+		req := newGetScoreRequest("MMD")
+		resp := httptest.NewRecorder()
+
+		server.ServeHTTP(resp, req)
+
+		assertStatus(t, resp.Code, http.StatusOK)
+		assertResponseBody(t, resp.Body.String(), "0")
+	})
+
 }
 
 // Return the request for given name
