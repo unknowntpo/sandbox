@@ -24,5 +24,10 @@ func (s *StubPlayerStore) GetPlayerScore(name string) int {
 }
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	player := strings.TrimPrefix(r.URL.Path, "/players/")
+	score := p.store.GetPlayerScore(player)
+	// TODO: what if player exist but score == 0 ?
+	if score == 0 {
+		w.WriteHeader(http.StatusNotFound)
+	}
 	fmt.Fprint(w, p.store.GetPlayerScore(player))
 }
