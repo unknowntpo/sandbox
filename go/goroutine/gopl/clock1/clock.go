@@ -19,7 +19,7 @@ func main() {
 			log.Fatal(err) // e.g. connection aborted
 			continue
 		}
-		handleConn(conn)
+		go handleConn(conn)
 	}
 
 }
