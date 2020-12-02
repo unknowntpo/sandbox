@@ -11,7 +11,10 @@ import (
 )
 
 func charCount(r io.Reader) (
-	runes map[rune]int, props map[string]int, sizes map[int]int, invalid int) {
+	runes map[rune]int,
+	props map[string]int,
+	sizes map[int]int,
+	invalid int) {
 	runes = make(map[rune]int)   // char frequency
 	props = make(map[string]int) // unicode.Properties frequency
 	sizes = make(map[int]int)    // rune length frequency
