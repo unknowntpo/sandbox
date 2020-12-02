@@ -14,6 +14,7 @@ func TestGETPlayers(t *testing.T) {
 			"Floyd":  10,
 			"MMD":    0,
 		},
+		nil,
 	}
 	server := &PlayerServer{&store}
 
@@ -63,18 +64,27 @@ func TestGETPlayers(t *testing.T) {
 func TestStoreWins(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{},
+		nil,
 	}
 	server := &PlayerServer{&store}
 
-	t.Run("it returns accepted on POST", func(t *testing.T) {
-		// Send a POST req without body
-		req, _ := http.NewRequest(http.MethodPost, "/players/Pepper", nil)
+	t.Run("it wins when POST", func(t *testing.T) {
+		req := newPostWinRequest("Pepper")
 		resp := httptest.NewRecorder()
 
 		server.ServeHTTP(resp, req)
 
 		assertStatus(t, resp.Code, http.StatusAccepted)
+
+		if len(store.winCalls) != 1 {
+			t.Errorf("got %d calls to RecordWin, want %d", len(store.winCalls), 1)
+		}
 	})
+}
+
+func newPostWinRequest(name string) *http.Request {
+	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
+	return req
 }
 
 // Return the request for given name

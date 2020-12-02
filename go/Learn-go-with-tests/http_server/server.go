@@ -12,11 +12,13 @@ var (
 )
 
 type StubPlayerStore struct {
-	scores map[string]int
+	scores   map[string]int
+	winCalls []string // append this slice by winner's name when someone wins
 }
 
 type PlayerStore interface {
 	GetPlayerScore(name string) (int, error)
+	RecordWin(name string)
 }
 
 type PlayerServer struct {
@@ -30,6 +32,10 @@ func (s *StubPlayerStore) GetPlayerScore(name string) (int, error) {
 	}
 	return score, nil
 }
+
+func (s *StubPlayerStore) RecordWin(name string) {
+	s.winCalls = append(s.winCalls, name)
+}
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
@@ -40,6 +46,8 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) processWin(w http.ResponseWriter) {
+	// Dummy name, modify it later
+	p.store.RecordWin("Bob")
 	w.WriteHeader(http.StatusAccepted)
 }
 func (p *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
