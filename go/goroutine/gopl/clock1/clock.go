@@ -4,11 +4,16 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 	"time"
 )
 
 func main() {
-	listener, err := net.Listen("tcp", ":8000")
+	if len(os.Args) != 2 {
+		log.Fatalf("Usage: ./clock <port>")
+	}
+	// TODO: validate the port specified from user
+	listener, err := net.Listen("tcp", os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
