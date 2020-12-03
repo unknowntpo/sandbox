@@ -12,23 +12,11 @@ func walk(x interface{}, fn func(input string)) {
 	case reflect.Struct:
 		// walk through all the fields in struct
 		numberOfValues = val.NumField()
-		//?
 		getField = val.Field
-		/*
-			for i := 0; i < val.NumField(); i++ {
-				walk(val.Field(i).Interface(), fn)
-			}
-		*/
 	case reflect.Slice:
 		// walk through all the elements in slice
 		numberOfValues = val.Len()
-		//?
 		getField = val.Index
-		/*
-			for i := 0; i < val.Len(); i++ {
-				walk(val.Index(i).Interface(), fn)
-			}
-		*/
 	case reflect.String:
 		// reach what we want, call fn()
 		numberOfValues = 0
