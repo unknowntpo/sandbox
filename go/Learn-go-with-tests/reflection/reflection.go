@@ -13,7 +13,7 @@ func walk(x interface{}, fn func(input string)) {
 		// walk through all the fields in struct
 		numberOfValues = val.NumField()
 		getField = val.Field
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		// walk through all the elements in slice
 		numberOfValues = val.Len()
 		getField = val.Index
