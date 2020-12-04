@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -9,10 +10,15 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		log.Fatalf("Usage: ./clock <port>")
+	// TODO: Use flags package to handle argument list
+	if len(os.Args) != 3 {
+		// TODO:
+		fmt.Errorf("Usage: ./clock <port> <time zone>\n e.g.\n$ ./clock localhost:8080 TZ=Asia/Tokyo")
+		ox.Exit(1)
 	}
 	// TODO: validate the port specified from user
+	//TODO: parse time zone
+	timezone := strings.TrimPrefix("TZ=")
 	listener, err := net.Listen("tcp", os.Args[1])
 	if err != nil {
 		log.Fatal(err)
@@ -24,12 +30,12 @@ func main() {
 			log.Fatal(err) // e.g. connection aborted
 			continue
 		}
-		go handleConn(conn)
+		go handleConn(conn, timezone)
 	}
 
 }
 
-func handleConn(c net.Conn) {
+func handleConn(c net.Conn, timezone string) {
 	defer c.Close()
 	for {
 		// send time in format
