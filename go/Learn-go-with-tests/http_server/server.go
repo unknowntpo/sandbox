@@ -48,7 +48,6 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) processWin(w http.ResponseWriter, player string) {
-	// Dummy name, modify it later
 	p.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }
