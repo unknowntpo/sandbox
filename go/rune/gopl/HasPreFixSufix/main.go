@@ -31,7 +31,7 @@ func Contains_HasSuffix(s, substr string) bool {
 		return true
 	}
 
-	for i := len(s); i >= 0; i-- {
+	for i := len(s); i > 0; i-- {
 		if HasSuffix(s[:i], substr) {
 			return true
 		}
