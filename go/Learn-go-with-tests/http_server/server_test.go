@@ -16,7 +16,7 @@ func TestGETPlayers(t *testing.T) {
 		},
 		nil,
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 
 	t.Run("returns Pepper's score", func(t *testing.T) {
 		req := newGetScoreRequest("Pepper")
@@ -66,7 +66,7 @@ func TestStoreWins(t *testing.T) {
 		map[string]int{},
 		nil,
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 
 	t.Run("it wins when POST", func(t *testing.T) {
 		player := "Pepper"
@@ -95,7 +95,8 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	store := InMemoryPlayerStore{
 		map[string]int{},
 	}
-	server := PlayerServer{&store}
+	server := NewPlayerServer(&store)
+
 	player := "Pepper"
 
 	// Send POST /players/Pepper request for 3 times, expect score of Pepper is equal to 3
@@ -114,8 +115,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 
 func TestLeague(t *testing.T) {
 	store := StubPlayerStore{}
-	server := &PlayerServer{&store}
-
+	server := NewPlayerServer(&store)
 	t.Run("It returns 200 on /league", func(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodGet, "/league", nil)
 		resp := httptest.NewRecorder()

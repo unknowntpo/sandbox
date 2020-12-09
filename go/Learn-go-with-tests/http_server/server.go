@@ -22,7 +22,8 @@ type PlayerStore interface {
 }
 
 type PlayerServer struct {
-	store PlayerStore
+	store  PlayerStore
+	router *http.ServeMux
 }
 
 func (s *StubPlayerStore) GetPlayerScore(name string) (int, error) {
@@ -37,16 +38,22 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// Create our mux
-	router := http.NewServeMux()
-	// register our handler into our mux manually
-	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
-	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
-
-	// Make our router handle the routing
-	router.ServeHTTP(w, r)
+	// Make our router to handle routing
+	p.router.ServeHTTP(w, r)
 }
 
+func NewPlayerServer(store PlayerStore) *PlayerServer {
+	// Create a Server with store and router
+	p := &PlayerServer{
+		store:  store,
+		router: http.NewServeMux(),
+	}
+	// register our handler into our mux manually
+	p.router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	p.router.Handle("/players/", http.HandlerFunc(p.playersHandler))
+
+	return p
+}
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
