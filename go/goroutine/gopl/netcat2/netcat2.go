@@ -13,9 +13,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
+	// Stop when someone close connection. e.g. send sigint to os.Stdin
 	go mustCopy(os.Stdout, conn)
 
-	// What if this line been executed before go mustCopy() ?
+	// return when we send STGINT
 	mustCopy(conn, os.Stdin)
 }
 
