@@ -109,11 +109,7 @@ func (n *Node) insertIter(key int) {
 	return
 }
 func (t *Tree) Remove(key int) {
-	if t == nil {
-		// Can't apply Remove method on a nil tree
-		return
-	}
-	if t.root == nil {
+	if t == nil || t.root == nil {
 		// Can't apply Remove method on a nil tree
 		return
 	}
@@ -125,9 +121,6 @@ func (t *Tree) Remove(key int) {
 // and return the new node for replacement of the node we just removed
 func (n *Node) remove(key int) *Node {
 	// Search for target
-	if n == nil {
-		return n
-	}
 	if key < n.Key {
 		n.Left = n.Left.remove(key)
 	} else if key > n.Key {
