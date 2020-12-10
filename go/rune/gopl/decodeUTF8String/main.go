@@ -8,7 +8,20 @@ import (
 func CountLengthOfRuneString(s string) {
 	fmt.Println(s)
 	fmt.Println("number of bytes:", len(s))
-	fmt.Println("number of runes:", utf8.RuneCountInString(s))
+
+	fmt.Println("Count number of runes:")
+	fmt.Println("\tUsing utf-8 package:", utf8.RuneCountInString(s))
+	RangeCountRunes(s)
+
+}
+func RangeCountRunes(s string) {
+	fmt.Printf("\tUsing range loop: ")
+	n := 0
+	for range s {
+		n++
+	}
+	fmt.Println(n)
+
 }
 func DecodeUsingRangeLoop(s string) {
 	fmt.Println("\nDecodeUsingRangeLoop:")
