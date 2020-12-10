@@ -40,7 +40,7 @@ func appendInt(x []int, y int) []int {
 	} else {
 		zcap := zlen
 		// Won't execute if zcap == 1, len(x) == 0 (when x is nil slice)
-		if x != nil {
+		if zcap < 2*len(x) {
 			zcap = 2 * len(x)
 		}
 		z = make([]int, zlen, zcap)
