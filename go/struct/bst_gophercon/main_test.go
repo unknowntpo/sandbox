@@ -61,3 +61,35 @@ func TestShow(t *testing.T) {
 		}
 	}
 }
+
+func TestRemove(t *testing.T) {
+	var tests = []struct {
+		name   string
+		keys   []int
+		target int
+		want   []int
+	}{
+		{"Remove root node", []int{5, 3, 7, 2, 4, 6, 8}, 5, []int{2, 3, 4, 6, 7, 8}},
+		{"Apply Remove on nil tree", []int(nil), 5, []int(nil)},
+		{"Remove leaf node", []int{5, 3, 7, 2, 4, 6, 8}, 2, []int{3, 4, 5, 6, 7, 8}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var tree = &Tree{nil}
+			tree.fillTree(test.keys)
+
+			// Traverse the tree and append the elements into slice
+			var result []int
+			tree.Remove(test.target)
+			tree.Show(func(key int) {
+				result = append(result, key)
+			})
+			// Check if the result are the same slice as we wanted
+			if !isSameSlice(result, test.want) {
+				t.Errorf("Remove method failed, get %d, want %d", result, test.want)
+			}
+		})
+	}
+
+}
