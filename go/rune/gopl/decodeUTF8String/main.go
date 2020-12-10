@@ -16,6 +16,14 @@ func DecodeUsingRangeLoop(s string) {
 	for i, r := range s {
 		fmt.Printf("%d\t%q\t%d\n", i, r, r)
 	}
+
+	// Decode utf-8 encoding string using utf-8 package
+	fmt.Println("\nDecode utf-8 encoding string using utf-8 package")
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		fmt.Printf("%d\t%c\n", i, r)
+		i += size
+	}
 }
 func main() {
 	s := "Hello, 世界"
