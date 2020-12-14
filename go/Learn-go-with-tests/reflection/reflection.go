@@ -25,6 +25,11 @@ func walk(x interface{}, fn func(input string)) {
 		for _, key := range val.MapKeys() {
 			walkValue(val.MapIndex(key))
 		}
+	case reflect.Chan:
+		// Iterate through all received values until chan are closed
+		for v, ok := val.Recv(); ok; v, ok = val.Recv() {
+			walk(v.Interface(), fn)
+		}
 	case reflect.String:
 		// reach what we want, call fn()
 		fn(val.String())
