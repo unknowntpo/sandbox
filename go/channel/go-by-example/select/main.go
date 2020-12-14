@@ -17,7 +17,7 @@ func main() {
 
 	go func() {
 		time.Sleep(2 * time.Second)
-		c1 <- "goroutine:2"
+		c2 <- "goroutine:2"
 	}()
 
 	// What does for-loop do?
