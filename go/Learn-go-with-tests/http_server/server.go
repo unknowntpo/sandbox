@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -21,6 +22,13 @@ type PlayerStore interface {
 	RecordWin(name string)
 }
 
+// Player stores a name with a number of wins.
+type Player struct {
+	Name string
+	Wins int
+}
+
+// PlayerServer is a HTTP interface for player information.
 type PlayerServer struct {
 	store        PlayerStore
 	http.Handler // Structure embedding
@@ -38,6 +46,7 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
+// NewPlayerServer creates a PlayerServer with routing configured.
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	// Create a Server with store and router
 	p := new(PlayerServer)
@@ -52,6 +61,10 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	return p
 }
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	leagueTable := []Player{
+		{"Chris", 20},
+	}
+	json.NewEncoder(w).Encode(leagueTable)
 	w.WriteHeader(http.StatusOK)
 }
 func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
