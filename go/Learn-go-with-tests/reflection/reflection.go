@@ -28,7 +28,7 @@ func walk(x interface{}, fn func(input string)) {
 	case reflect.Chan:
 		// Iterate through all received values until chan are closed
 		for v, ok := val.Recv(); ok; v, ok = val.Recv() {
-			walk(v.Interface(), fn)
+			walkValue(v)
 		}
 	case reflect.String:
 		// reach what we want, call fn()
