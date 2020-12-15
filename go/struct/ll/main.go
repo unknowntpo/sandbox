@@ -38,7 +38,7 @@ func (l *List) InsertHead(value int) {
 func (e *Element) insertHead(value int) *Element {
 	return &Element{Value: value, Next: e}
 }
-func (e *Element) clear()       {}
+func (l *List) Clear()          { l.head = nil }
 func (e *Element) findEntry()   {}
 func (e *Element) removeEntry() {}
 func (e *Element) swap_pair()   {}
@@ -71,5 +71,8 @@ func main() {
 	}
 
 	fmt.Println("Print the list...")
+	list.PrintList()
+	fmt.Println("Clear the list...")
+	list.Clear()
 	list.PrintList()
 }
