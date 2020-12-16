@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 )
 
@@ -15,6 +16,7 @@ func TestGETPlayers(t *testing.T) {
 			"Floyd":  10,
 			"MMD":    0,
 		},
+		nil,
 		nil,
 	}
 	server := NewPlayerServer(&store)
@@ -66,6 +68,7 @@ func TestStoreWins(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{},
 		nil,
+		nil,
 	}
 	server := NewPlayerServer(&store)
 
@@ -90,9 +93,16 @@ func TestStoreWins(t *testing.T) {
 }
 
 func TestLeague(t *testing.T) {
-	store := StubPlayerStore{}
-	server := NewPlayerServer(&store)
-	t.Run("It returns 200 on /league", func(t *testing.T) {
+	t.Run("It returns the league table as JSON", func(t *testing.T) {
+		wantedLeague := []Player{
+			{"Cleo", 32},
+			{"Chris", 20},
+			{"Tiest", 14},
+		}
+
+		store := StubPlayerStore{nil, nil, wantedLeague}
+		server := NewPlayerServer(&store)
+
 		req, _ := http.NewRequest(http.MethodGet, "/league", nil)
 		resp := httptest.NewRecorder()
 		server.ServeHTTP(resp, req)
@@ -106,6 +116,10 @@ func TestLeague(t *testing.T) {
 		}
 
 		assertStatus(t, resp.Code, http.StatusOK)
+
+		if !reflect.DeepEqual(got, wantedLeague) {
+			t.Errorf("got %v, want %v", got, wantedLeague)
+		}
 	})
 }
 

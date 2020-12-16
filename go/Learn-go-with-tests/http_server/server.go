@@ -15,11 +15,13 @@ var (
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string // append this slice by winner's name when someone wins
+	league   []Player // Store some players in our store
 }
 
 type PlayerStore interface {
 	GetPlayerScore(name string) (int, error)
 	RecordWin(name string)
+	GetLeague() []Player
 }
 
 // Player stores a name with a number of wins.
@@ -46,6 +48,10 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
+func (s *StubPlayerStore) GetLeague() []Player {
+	return s.league
+}
+
 // NewPlayerServer creates a PlayerServer with routing configured.
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	// Create a Server with store and router
@@ -61,7 +67,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	return p
 }
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(p.getLeagueTable())
+	json.NewEncoder(w).Encode(p.store.GetLeague())
 	w.WriteHeader(http.StatusOK)
 }
 
