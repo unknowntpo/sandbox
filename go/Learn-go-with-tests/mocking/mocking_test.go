@@ -6,7 +6,10 @@ import (
 )
 
 func TestCountdown(t *testing.T) {
-	want := "3"
+	want := `3
+2
+1
+Go!`
 
 	buf := &bytes.Buffer{}
 	Countdown(buf)
