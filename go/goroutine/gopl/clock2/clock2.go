@@ -25,7 +25,7 @@ func main() {
 		// accept the connection
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatal(err) // e.g. connection aborted
+			log.Print(err) // e.g. connection aborted
 			continue
 		}
 		go handleConn(conn)
