@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+const (
+	jsonContentType = "application/json"
+)
+
 var (
 	ErrPlayerNotFound = errors.New("Player not found")
 )
@@ -67,8 +71,9 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	return p
 }
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	// Why we have to set header of response before encode json?
+	w.Header().Set("content-type", jsonContentType)
 	json.NewEncoder(w).Encode(p.store.GetLeague())
-	w.WriteHeader(http.StatusOK)
 }
 
 func (p *PlayerServer) getLeagueTable() []Player {

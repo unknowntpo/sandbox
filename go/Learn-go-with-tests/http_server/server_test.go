@@ -111,6 +111,7 @@ func TestLeague(t *testing.T) {
 
 		got := getLeagueFromResponse(t, resp.Body)
 		assertStatus(t, resp.Code, http.StatusOK)
+		assertContentType(t, resp, jsonContentType)
 		assertLeague(t, got, wantedLeague)
 	})
 }
@@ -150,7 +151,13 @@ func assertLeague(t *testing.T, got, want []Player) {
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v, want %v", got, want)
 	}
+}
 
+func assertContentType(t *testing.T, resp *httptest.ResponseRecorder, want string) {
+	t.Helper()
+	if resp.Result().Header.Get("content-type") != want {
+		t.Errorf("response did not have content-type of %s, got %v", want, resp.Result().Header)
+	}
 }
 func getLeagueFromResponse(t *testing.T, body io.Reader) (league []Player) {
 	t.Helper()
