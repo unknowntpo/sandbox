@@ -13,10 +13,7 @@ func HasSuffix(s, suffix string) bool {
 
 // Use HasPrefix to check wheter substr is within s.
 func Contains_HasPrefix(s, substr string) bool {
-	if substr == "" {
-		return true
-	}
-	for i := 0; i < len(s); i++ {
+	for i := 0; i <= len(s); i++ {
 		if HasPrefix(s[i:], substr) {
 			return true
 		}
@@ -26,12 +23,7 @@ func Contains_HasPrefix(s, substr string) bool {
 
 // Use HasSuffix to check wheter substr is within s.
 func Contains_HasSuffix(s, substr string) bool {
-	// Explicitly check if substr is "", but in HasSuffix version, it's no need.
-	if substr == "" {
-		return true
-	}
-
-	for i := len(s); i > 0; i-- {
+	for i := len(s); i >= 0; i-- {
 		if HasSuffix(s[:i], substr) {
 			return true
 		}
