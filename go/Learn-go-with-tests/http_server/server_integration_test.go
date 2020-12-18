@@ -10,11 +10,8 @@ import (
 // for 3 times, and use GET /players/Pepper request to check the statuscode,
 // and result of score recording.
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := InMemoryPlayerStore{
-		map[string]int{},
-	}
-	server := NewPlayerServer(&store)
-
+	store := NewInMemoryPlayerStore()
+	server := NewPlayerServer(store)
 	player := "Pepper"
 
 	// Send POST /players/Pepper request for 3 times, expect score of Pepper is equal to 3
@@ -22,11 +19,28 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 
-	// Send GET /players/Pepper request to check the score recording result
-	req := newGetScoreRequest(player)
-	resp := httptest.NewRecorder()
-	server.ServeHTTP(resp, req)
+	t.Run("get score", func(t *testing.T) {
+		// Send GET /players/Pepper request to check the score recording result
+		req := newGetScoreRequest(player)
+		resp := httptest.NewRecorder()
+		server.ServeHTTP(resp, req)
 
-	assertStatus(t, resp.Code, http.StatusOK)
-	assertResponseBody(t, resp.Body.String(), "3")
+		assertStatus(t, resp.Code, http.StatusOK)
+		assertResponseBody(t, resp.Body.String(), "3")
+	})
+
+	t.Run("get league", func(t *testing.T) {
+		// Send GET /players/Pepper request to check the score recording result
+		req := newLeagueRequest()
+		resp := httptest.NewRecorder()
+		server.ServeHTTP(resp, req)
+
+		got := getLeagueFromResponse(t, resp.Body)
+		want := []Player{
+			{"Pepper", 3},
+		}
+		assertStatus(t, resp.Code, http.StatusOK)
+		assertLeague(t, got, want)
+	})
+
 }
