@@ -68,9 +68,7 @@ func startElement(n *html.Node) {
 		fmt.Printf("%*s", depth*indent, "")
 		for _, ele := range n.Data {
 			if ele == '\n' {
-				fmt.Printf("\\n")
 			} else if ele == '\t' {
-				fmt.Printf("\\t")
 			} else {
 				fmt.Print(string(ele))
 			}
