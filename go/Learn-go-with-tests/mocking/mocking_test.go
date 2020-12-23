@@ -70,6 +70,7 @@ func (s *SpyTime) Sleep(duration time.Duration) {
 func TestConfigurableSleeper(t *testing.T) {
 	sleepTime := 5 * time.Second
 
+	// spyTime is used to imitate the real behavior of time.Sleep()
 	spyTime := SpyTime{}
 	sleeper := ConfigurableSleeper{sleepTime, spyTime.Sleep}
 	sleeper.Sleep()
