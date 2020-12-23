@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 func Greet(writer io.Writer, name string) {
@@ -11,7 +12,8 @@ func Greet(writer io.Writer, name string) {
 }
 
 func MyGreeterHandler(w http.ResponseWriter, r *http.Request) {
-	Greet(w, "world")
+	name := strings.TrimPrefix(r.URL.Path, "/")
+	Greet(w, name)
 }
 
 func main() {
