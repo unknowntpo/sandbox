@@ -17,15 +17,22 @@ func main() {
 		os.Exit(1)
 	}
 
-	listener, err := net.Listen("tcp", ":"+os.Args[2])
+	// validate the location specified by $TZ
+	_, err := time.LoadLocation(os.Getenv("TZ"))
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// listen to the conn
+	l, err := net.Listen("tcp", ":"+os.Args[2])
+	if err != nil {
+		log.Fatalf("fail to listen to port %s", os.Args[2])
+	}
+
 	for {
-		// accept the connection
-		conn, err := listener.Accept()
+		conn, err := l.Accept()
 		if err != nil {
-			log.Print(err) // e.g. connection aborted
+			log.Print(err)
 			continue
 		}
 		go handleConn(conn)
@@ -36,13 +43,25 @@ func main() {
 func handleConn(c net.Conn) {
 	defer c.Close()
 	for {
-		// send time in format
 		timezone := os.Getenv("TZ")
-		_, err := io.WriteString(c, timezone+": "+time.Now().Format("Mon Jan 2 15:04:05 -0700 MST 2006\n"))
+		t, err := timeIn(time.Now(), timezone)
 		if err != nil {
-			return // e.g. client disconnected
+			// fail to resolve TZ
+			log.Print(err)
+			return
 		}
-		// delay for 1 seconds
+		_, err = io.WriteString(c, timezone+" : "+t.Format("Mon Jan 2 15:04:05 -0700 MST 2006")+"\n")
+		if err != nil {
+			return
+		}
 		time.Sleep(1 * time.Second)
 	}
+}
+
+func timeIn(t time.Time, name string) (time.Time, error) {
+	loc, err := time.LoadLocation(name)
+	if err == nil {
+		t = t.In(loc)
+	}
+	return t, err
 }
