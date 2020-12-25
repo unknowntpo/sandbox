@@ -10,33 +10,23 @@ type FileSystemPlayerStore struct {
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) (int, error) {
-	// TODO: Handle dummy return values
-	league := f.GetLeague()
-	for _, player := range league {
-		if player.Name == name {
-			return player.Wins, nil
-		}
+
+	player := f.GetLeague().Find(name)
+	if player != nil {
+		return player.Wins, nil
 	}
+
 	// player not found
 	return 0, ErrPlayerNotFound
-
 }
 func (f *FileSystemPlayerStore) RecordWin(name string) {
-	// TODO: record wins toleauge table
 	league := f.GetLeague()
+	player := league.Find(name)
 
-	hasPlayer := false
-	for i, player := range league {
-		if player.Name == name {
-			league[i].Wins++
-			//player.Wins++
-			hasPlayer = true
-		}
-	}
-
-	// player not found
-	// same underlying array?
-	if hasPlayer == false {
+	if player != nil {
+		player.Wins++
+	} else {
+		// player not found
 		league = append(league, Player{Name: name, Wins: 1})
 	}
 
