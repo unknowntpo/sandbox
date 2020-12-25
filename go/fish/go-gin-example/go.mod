@@ -16,3 +16,11 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace (
+	github.com/EDDYCJY/go-gin-example/conf => ./pkg/conf
+	github.com/EDDYCJY/go-gin-example/middleware => ./middleware
+	github.com/EDDYCJY/go-gin-example/models => ./models
+	github.com/EDDYCJY/go-gin-example/pkg/setting => ./pkg/setting
+	github.com/EDDYCJY/go-gin-example/routers => ./routers
+)
