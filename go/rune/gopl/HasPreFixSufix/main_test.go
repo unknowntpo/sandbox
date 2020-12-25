@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"strings"
+	"strings"
 	"testing"
 )
 
@@ -83,6 +83,56 @@ func TestContains(t *testing.T) {
 					t.Errorf("got %t, want %t", got, tt.want)
 				}
 			})
+		}
+	})
+
+}
+
+func BenchmarkContains(b *testing.B) {
+	sSuffix30 := "sdjaskdlfjlskadjfklasjdflHello"
+	sPrefix30 := "Helloasdjfksdjfkjskddfksdjfkid"
+	c30 := "123456789012345678901234567890"
+	sPrefix60 := sPrefix30 + c30
+	sPrefix90 := sPrefix60 + c30
+	subStr := "Hello"
+
+	b.Run("my Contains using Contains_HasPrefix", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			Contains_HasPrefix(sSuffix30, subStr)
+		}
+	})
+
+	b.Run("my Contains using Contains_HasSuffix", func(b *testing.B) {
+		b.Run("30 characters", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				Contains_HasSuffix(sPrefix30, subStr)
+			}
+		})
+		b.Run("60 characters", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				Contains_HasSuffix(sPrefix60, subStr)
+			}
+		})
+		b.Run("90 characters", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				Contains_HasSuffix(sPrefix90, subStr)
+			}
+		})
+
+	})
+	b.Run("30 chars using strings.Contains", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			strings.Contains(sPrefix30, subStr)
+		}
+	})
+	b.Run("60 chars using strings.Contains", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			strings.Contains(sPrefix60, subStr)
+		}
+	})
+	b.Run("90 chars using strings.Contains", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			strings.Contains(sPrefix90, subStr)
 		}
 	})
 
