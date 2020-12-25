@@ -45,7 +45,7 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 	json.NewEncoder(f.database).Encode(league)
 }
 
-func (f *FileSystemPlayerStore) GetLeague() []Player {
+func (f *FileSystemPlayerStore) GetLeague() league {
 	f.database.Seek(0, 0)
 	// TODO: Handle errs
 	league, _ := NewLeague(f.database)

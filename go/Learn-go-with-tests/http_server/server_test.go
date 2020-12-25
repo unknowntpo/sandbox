@@ -94,7 +94,7 @@ func TestStoreWins(t *testing.T) {
 
 func TestLeague(t *testing.T) {
 	t.Run("It returns the league table as JSON", func(t *testing.T) {
-		wantedLeague := []Player{
+		wantedLeague := league{
 			{"Cleo", 32},
 			{"Chris", 20},
 			{"Tiest", 14},
@@ -145,7 +145,7 @@ func newLeagueRequest() *http.Request {
 	req, _ := http.NewRequest(http.MethodGet, "/league", nil)
 	return req
 }
-func assertLeague(t *testing.T, got, want []Player) {
+func assertLeague(t *testing.T, got, want league) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v, want %v", got, want)
@@ -158,7 +158,7 @@ func assertContentType(t *testing.T, resp *httptest.ResponseRecorder, want strin
 		t.Errorf("response did not have content-type of %s, got %v", want, resp.Result().Header)
 	}
 }
-func getLeagueFromResponse(t *testing.T, body io.Reader) (league []Player) {
+func getLeagueFromResponse(t *testing.T, body io.Reader) (league league) {
 	t.Helper()
 
 	league, err := NewLeague(body)

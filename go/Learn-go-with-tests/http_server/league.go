@@ -5,9 +5,11 @@ import (
 	"io"
 )
 
+type league []Player
+
 // NewLeague creates a league from JSON.
-func NewLeague(rdr io.Reader) ([]Player, error) {
-	var league []Player
+func NewLeague(rdr io.Reader) (league, error) {
+	var league league
 	err := json.NewDecoder(rdr).Decode(&league)
 	return league, err
 }
