@@ -9,9 +9,9 @@ type league []Player
 
 // NewLeague creates a league from JSON.
 func NewLeague(rdr io.Reader) (league, error) {
-	var league league
-	err := json.NewDecoder(rdr).Decode(&league)
-	return league, err
+	var l league
+	err := json.NewDecoder(rdr).Decode(&l)
+	return l, err
 }
 
 // Find finds player by name in league

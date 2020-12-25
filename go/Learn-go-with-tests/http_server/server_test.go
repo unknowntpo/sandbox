@@ -158,14 +158,14 @@ func assertContentType(t *testing.T, resp *httptest.ResponseRecorder, want strin
 		t.Errorf("response did not have content-type of %s, got %v", want, resp.Result().Header)
 	}
 }
-func getLeagueFromResponse(t *testing.T, body io.Reader) (league league) {
+func getLeagueFromResponse(t *testing.T, body io.Reader) (l league) {
 	t.Helper()
 
-	league, err := NewLeague(body)
+	l, err := NewLeague(body)
 	if err != nil {
 		t.Fatalf("Unable to parse response %q from server into slice of Player, '%v'", body, err)
 	}
 
-	return league
+	return l
 
 }
