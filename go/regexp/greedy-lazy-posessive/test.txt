@@ -1,0 +1,19 @@
+# Greedy, Lazy, and Possessive quantifier
+
+Match: 
+		/
+			a	# Match a
+			.*	# Match any character
+                        ?       # Lazy quantifier
+			t	# Match t
+		/
+in vim 
+just use 'a\{-}t'
+The non-greedy version of * is \{-}. So, simply replace .* with .\{-}
+                
+greedy can be dangerous at times
+
+r re regex
+
+tttt aaaaa aattaatatatatttt atttatt ttat
+
