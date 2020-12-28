@@ -10,7 +10,10 @@ import (
 // for 3 times, and use GET /players/Pepper request to check the statuscode,
 // and result of score recording.
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := NewInMemoryPlayerStore()
+	// Create empty database
+	database, cleanDatabase := createTempFile(t, "")
+	defer cleanDatabase()
+	store := &FileSystemPlayerStore{database}
 	server := NewPlayerServer(store)
 	player := "Pepper"
 
