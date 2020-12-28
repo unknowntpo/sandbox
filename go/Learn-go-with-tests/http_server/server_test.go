@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"reflect"
 	"testing"
 )
@@ -113,6 +115,72 @@ func TestLeague(t *testing.T) {
 		assertContentType(t, resp, jsonContentType)
 		assertLeague(t, got, wantedLeague)
 	})
+}
+
+func BenchmarkLeague(b *testing.B) {
+	b.Run("get league from InMemoryPlayerStore", func(b *testing.B) {
+		store := InMemoryPlayerStore{map[string]int{
+			"Cleo":  32,
+			"Chris": 20,
+			"Tiest": 14,
+		}}
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = store.GetLeague()
+		}
+	})
+
+	b.Run("get league from StubPlayerStore", func(b *testing.B) {
+		wantedLeague := league{
+			{"Cleo", 32},
+			{"Chris", 20},
+			{"Tiest", 14},
+		}
+
+		store := StubPlayerStore{nil, nil, wantedLeague}
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = store.GetLeague()
+		}
+	})
+	b.Run("get league from FileSystemPlayerStore", func(b *testing.B) {
+		initData := `[
+            {"Name": "Cleo", "Wins": 32},
+            {"Name": "Chris", "Wins": 20},
+	    {"Name": "Tiest", "Wins": 14}]`
+
+		database, cleanDatabase := createTempFileForBench(b, initData)
+		defer cleanDatabase()
+
+		store := FileSystemPlayerStore{database}
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			_ = store.GetLeague()
+		}
+	})
+
+}
+
+func createTempFileForBench(tb testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
+	tb.Helper()
+	tmpfile, err := ioutil.TempFile("", "db")
+
+	if err != nil {
+		tb.Fatalf("could not create temp file %v", err)
+
+	}
+
+	tmpfile.Write([]byte(initialData))
+
+	removeFile := func() {
+		tmpfile.Close()
+		os.Remove(tmpfile.Name())
+	}
+
+	return tmpfile, removeFile
 }
 
 // Some helper functions:
