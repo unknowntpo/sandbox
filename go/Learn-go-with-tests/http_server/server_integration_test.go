@@ -39,7 +39,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		server.ServeHTTP(resp, req)
 
 		got := getLeagueFromResponse(t, resp.Body)
-		want := league{
+		want := League{
 			{"Pepper", 3},
 		}
 		assertStatus(t, resp.Code, http.StatusOK)

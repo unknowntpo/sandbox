@@ -19,13 +19,13 @@ var (
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string // append this slice by winner's name when someone wins
-	league   league   // Store some players in our store
+	league   League   // Store some players in our store
 }
 
 type PlayerStore interface {
 	GetPlayerScore(name string) (int, error)
 	RecordWin(name string)
-	GetLeague() league
+	GetLeague() League
 }
 
 // Player stores a name with a number of wins.
@@ -52,7 +52,7 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func (s *StubPlayerStore) GetLeague() league {
+func (s *StubPlayerStore) GetLeague() League {
 	return s.league
 }
 

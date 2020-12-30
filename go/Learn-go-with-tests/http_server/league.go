@@ -5,19 +5,19 @@ import (
 	"io"
 )
 
-type league []Player
+type League []Player
 
-// NewLeague creates a league from JSON.
-func NewLeague(rdr io.Reader) (league, error) {
-	var l league
+// NewLeague creates a League from JSON.
+func NewLeague(rdr io.Reader) (League, error) {
+	var l League
 	err := json.NewDecoder(rdr).Decode(&l)
 	return l, err
 }
 
-// Find finds player by name in league
+// Find finds player by name in League
 // Return pointer to player if player is found.
 // If player not found, return nil
-func (l league) Find(name string) *Player {
+func (l League) Find(name string) *Player {
 
 	for i, player := range l {
 		if player.Name == name {

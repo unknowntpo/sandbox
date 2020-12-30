@@ -21,14 +21,14 @@ func TestFileSystemStore(t *testing.T) {
 
 		got := store.GetLeague()
 
-		want := league{
+		want := League{
 			{"Cleo", 10},
 			{"Chris", 33},
 		}
 
 		assertLeague(t, got, want)
 
-		// call store.getleague() again to check seek problem
+		// call store.GetLeague() again to check seek problem
 		got = store.GetLeague()
 		assertLeague(t, got, want)
 	})
