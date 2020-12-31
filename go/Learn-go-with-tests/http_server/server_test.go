@@ -154,7 +154,7 @@ func BenchmarkLeague(b *testing.B) {
 		database, cleanDatabase := createTempFileForBench(b, initData)
 		defer cleanDatabase()
 
-		store := FileSystemPlayerStore{database}
+		store := NewFileSystemPlayerStore(database)
 
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {

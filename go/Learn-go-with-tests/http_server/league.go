@@ -7,7 +7,7 @@ import (
 
 type League []Player
 
-// NewLeague creates a League from JSON.
+// NewLeague creates a League from rdr, which stores JSON data.
 func NewLeague(rdr io.Reader) (League, error) {
 	var l League
 	err := json.NewDecoder(rdr).Decode(&l)

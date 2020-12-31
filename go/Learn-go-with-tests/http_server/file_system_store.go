@@ -7,11 +7,23 @@ import (
 
 type FileSystemPlayerStore struct {
 	database io.ReadWriteSeeker
+	league   League
 }
 
+func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
+	database.Seek(0, 0)
+	league, err := NewLeague(database)
+	if err != nil {
+		// TODO: handle error
+	}
+	return &FileSystemPlayerStore{
+		database: database,
+		league:   league,
+	}
+}
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) (int, error) {
 
-	player := f.GetLeague().Find(name)
+	player := f.league.Find(name)
 	if player != nil {
 		return player.Wins, nil
 	}
@@ -20,24 +32,20 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) (int, error) {
 	return 0, ErrPlayerNotFound
 }
 func (f *FileSystemPlayerStore) RecordWin(name string) {
-	league := f.GetLeague()
-	player := league.Find(name)
+	player := f.league.Find(name)
 
 	if player != nil {
 		player.Wins++
 	} else {
 		// player not found
-		league = append(league, Player{Name: name, Wins: 1})
+		f.league = append(f.league, Player{Name: name, Wins: 1})
 	}
 
 	// Write league back to our database
 	f.database.Seek(0, 0)
-	json.NewEncoder(f.database).Encode(league)
+	json.NewEncoder(f.database).Encode(f.league)
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
-	f.database.Seek(0, 0)
-	// TODO: Handle errs
-	league, _ := NewLeague(f.database)
-	return league
+	return f.league
 }
