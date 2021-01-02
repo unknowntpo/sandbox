@@ -1,17 +1,15 @@
 package main
 
-import "fmt"
-
 type Trie struct {
 	root *Node
 }
 
-type alphabet int32
+type alphabet byte
 
 type Node struct {
 	isEnd    bool
 	char     alphabet
-	children map[alphabet]*Node
+	children []*Node
 }
 
 func NewTrie() *Trie {
@@ -28,32 +26,37 @@ func (t *Trie) Insert(s string) {
 	// search alphabet
 }
 func (n *Node) insert(s string) {
-	// if c is exist in n.children
-	// no need to append children
-	// if not
-	// append children
-	hasChar := false
-	for _, c := range n.children {
-		// if character exist
-		// recursively call insert to that alphabet
-		if c == a.char {
-			a.insert(c)
-		}
-		hasChar = true
+	if len(s) == 0 {
+		return
 	}
-	// if character not exist
-	if hasChar == false {
-		// check if n.children exist
-		// if not, make the map and insert character
-		if n.children == nil {
-			n.children = map[alphabet]*Node{
-				c: &Node{isEnd: true, children: nil},
-			}
-		}
+
+	// check existance of s[0] in n.children
+	if i, ok := n.getIndex(alphabet(s[0])); !ok {
+		// s[0] not in n.children
+		// create char target in n.children
+		n.isEnd = false
+		n.children = append(n.children, &Node{isEnd: true, char: alphabet(s[0]), children: nil})
+		n.children[i].insert(s[1:])
+	} else {
+		// s[0] is in n.children
+		n.children[i].insert(s[1:])
 	}
 }
 
-func (t *Trie) Search()
+// return the index of character in n.children,
+// if character c is in n.children return index and true
+// if not exist, return 0 and false
+func (n *Node) getIndex(c alphabet) (index int, ok bool) {
+	for i, v := range n.children {
+		if c == v.char {
+			// target found
+			return i, true
+
+		}
+	}
+	return 0, false
+}
+func (t *Trie) Search() {}
 
 func main() {
 	var t *Trie
