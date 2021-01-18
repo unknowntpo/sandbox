@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"golang.org/x/net/html"
-	"strings"
+	"io"
 )
 
 const indent = 4
@@ -18,11 +18,32 @@ const s = `
     </body>
 </html>`
 
+// reader is a struct to hold a string
+type reader struct {
+	s string
+	i int64
+}
+
+// newReader transfer string s to our self-defined reader
+func newReader(s string) *reader {
+	return &reader{s, 0}
+}
+
+// Read read from reader to buffer b
+func (r *reader) Read(b []byte) (n int, err error) {
+	if r.i >= int64(len(r.s)) {
+		return 0, io.EOF
+	}
+	// copy min(len(b), len(r.s[r.i:])) to b
+	n = copy(b, r.s[r.i:])
+	r.i += int64(n)
+	return
+}
 func main() {
 	outline(s)
 }
 func outline(s string) error {
-	doc, err := html.Parse(strings.NewReader(s))
+	doc, err := html.Parse(newReader(s))
 	if err != nil {
 		return err
 	}
