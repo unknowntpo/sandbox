@@ -26,9 +26,11 @@ func (l *limitedReader) Read(p []byte) (n int, err error) {
 		return
 	}
 
-	// FIXME: In source code, why do we need this check ?
+	// Limit the amount of bytes we read from l.R to l.N
 	// Ref: https://golang.org/src/io/io.go?s=15184:15241#L438
-	// if int64(len(p)) > l.N
+	if int64(len(p)) > l.N {
+		p = p[0:l.N]
+	}
 
 	// read n bytes from underlying io.Reader l.R
 	n, err = l.R.Read(p)
@@ -50,7 +52,7 @@ func limitReader(r io.Reader, n int64) io.Reader {
 
 func main() {
 	r := strings.NewReader("some io.Reader stream to be read\n")
-	lr := io.LimitReader(r, 4)
+	lr := limitReader(r, 4)
 
 	if _, err := io.Copy(os.Stdout, lr); err != nil {
 		log.Fatal(err)
