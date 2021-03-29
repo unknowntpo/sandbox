@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>Total</title>
+  </head>
+  <body>
+    <p>This is original content</p>
+    <button id="btn">click me to change content</button>
+  </body>
+</html>
+<script>
+    btn = document.getElementById("btn")
+    btn.addEventListener("click", function(){
+        document.getElementsByTagName("p")[0].innerHTML = "new content";
+    });
+</script>
