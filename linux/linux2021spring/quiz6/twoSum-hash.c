@@ -1,14 +1,23 @@
 #include <stddef.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "lib/util.h"
 
-struct hlist_node { struct hlist_node *next, **pprev; };
-struct hlist_head { struct hlist_node *first; };
-typedef struct { int bits; struct hlist_head *ht; } map_t;
+struct hlist_node {
+    struct hlist_node *next, **pprev;
+};
+struct hlist_head {
+    struct hlist_node *first;
+};
+typedef struct {
+    int bits;
+    struct hlist_head *ht;
+} map_t;
 
 #define MAP_HASH_SIZE(bits) (1 << bits)
 
-map_t *map_init(int bits) {
+map_t *map_init(int bits)
+{
     map_t *map = malloc(sizeof(map_t));
     if (!map)
         return NULL;
@@ -17,7 +26,7 @@ map_t *map_init(int bits) {
     map->ht = malloc(sizeof(struct hlist_head) * MAP_HASH_SIZE(map->bits));
     if (map->ht) {
         for (int i = 0; i < MAP_HASH_SIZE(map->bits); i++)
-             (map->ht)[i].first = NULL;
+            (map->ht)[i].first = NULL;
     } else {
         free(map);
         map = NULL;
@@ -38,12 +47,14 @@ struct hash_key {
     })
 
 #define GOLDEN_RATIO_32 0x61C88647
-static inline unsigned int hash(unsigned int val, unsigned int bits) {
+static inline unsigned int hash(unsigned int val, unsigned int bits)
+{
     /* High bits are more random, so use them. */
     return (val * GOLDEN_RATIO_32) >> (32 - bits);
 }
 
-static struct hash_key *find_key(map_t *map, int key) {
+static struct hash_key *find_key(map_t *map, int key)
+{
     struct hlist_head *head = &(map->ht)[hash(key, map->bits)];
     for (struct hlist_node *p = head->first; p; p = p->next) {
         struct hash_key *kn = container_of(p, struct hash_key, node);
@@ -70,13 +81,13 @@ void map_add(map_t *map, int key, void *data)
 
     struct hlist_head *h = &map->ht[hash(key, map->bits)];
     struct hlist_node *n = &kn->node, *first = h->first;
-    //NNN;
+    // NNN;
     /* no operation */
     if (first)
         first->pprev = &n->next;
     h->first = n;
     n->pprev = &h->first;
-    //PPP;
+    // PPP;
 }
 
 void map_deinit(map_t *map)
@@ -134,6 +145,16 @@ bail:
     return ret;
 }
 
-int main() {
-	map_init(10);
+int main()
+{
+    int nums[] = {2, 7, 11, 15};
+    int *pnum = nums;
+    /* Let callee to specify the size of returned array */
+    int *returnSize;
+    int target = 9;
+    int *res;
+
+    res = twoSum(pnum, sizeof(nums) / sizeof(int), target, returnSize);
+    /* want [0, 1] */
+    show(res, *returnSize);
 }
