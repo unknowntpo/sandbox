@@ -1,0 +1,22 @@
+# ver4 3:13
+
+CC := gcc
+CFLAGS := -Wall -Werror
+
+all: factorial
+
+factorial: main.o factorial.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.o: %.c factorial.h
+	$(CC) $(CFLAGS) -c $<
+
+.PHONY: generate
+
+generate:
+	touch main.c factorial.c factorial.h
+	@echo "int main(){}" > main.c
+
+
+clean:
+	-rm -f factorial main.o factorial.o
