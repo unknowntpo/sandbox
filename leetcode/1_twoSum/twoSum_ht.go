@@ -25,13 +25,9 @@ func (m *Map) Init(bit int) {
 }
 
 func (h *htHead) appendHtNode(key, value int) {
-	node := h.first
-	if node == nil {
-		node = &htNode{key: key, value: value, next: nil}
-		return
-	}
-	for ; node.next != nil; node = node.next {
-		if node.key == key {
+	indirect := &h.first
+	for ; (*indirect) != nil; indirect = &(*indirect).next {
+		if (*indirect).key == key {
 			// key exist, no need to append
 			return
 		}
@@ -39,8 +35,7 @@ func (h *htHead) appendHtNode(key, value int) {
 
 	// at tail of list, append newNode
 	newNode := &htNode{key: key, value: value, next: nil}
-	node.next = newNode
-
+	(*indirect) = newNode
 }
 
 func (m *Map) Add(key, value int) {
@@ -84,15 +79,18 @@ func main() {
 	bit := 10
 	m.Init(bit)
 	nums := []int{2, 7, 11, 15}
+
+	// add element of nums as key, and the index of element in nums as value
 	for i, v := range nums {
-		// add element of nums as key, and the index of element in nums as value
 		m.Add(v, i)
 	}
-	v, ok := m.Get(nums[0]) // expect 0, true
-	if ok {
-		fmt.Println(nums[0], ":", v)
-	} else {
-		fmt.Println("not exist !")
-	}
 
+	for i, _ := range nums {
+		v, ok := m.Get(nums[i]) // expect 0, true
+		if ok {
+			fmt.Printf("nums[%d]: %d\n", i, v)
+		} else {
+			fmt.Printf("nums[%d] doesn't exist!", i)
+		}
+	}
 }
