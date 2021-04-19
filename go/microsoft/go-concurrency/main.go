@@ -19,7 +19,7 @@ func checkAPI(api string, ch chan string) {
 func main() {
 	start := time.Now()
 
-	ch := make(chan string)
+	ch := make(chan string, 3)
 
 	apis := []string{
 		"https://management.azure.com",
