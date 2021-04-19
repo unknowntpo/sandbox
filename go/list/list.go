@@ -19,6 +19,12 @@ func New() *List {
 func (l *List) Len() int { return l.len }
 
 func (l *List) Front() *Element { return l.root }
+
+func (l *List) PushFront(value interface{}) {
+	indirect := &l.root
+	newNode := &Element{Value: value, next: l.root}
+	*indirect = newNode
+}
 func (l *List) PushBack(value interface{}) {
 	indirect := &l.root
 	for ; *indirect != nil; indirect = &(*indirect).next {
