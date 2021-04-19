@@ -6,6 +6,16 @@ import (
 	"time"
 )
 
+func checkAPI(api string) {
+	_, err := http.Get(api)
+	if err != nil {
+		fmt.Printf("ERROR: %s is down!\n", api)
+		return
+	}
+
+	fmt.Printf("SUCCESS: %s is up and running!\n", api)
+}
+
 func main() {
 	start := time.Now()
 
@@ -19,13 +29,7 @@ func main() {
 	}
 
 	for _, api := range apis {
-		_, err := http.Get(api)
-		if err != nil {
-			fmt.Printf("ERROR: %s is down!\n", api)
-			continue
-		}
-
-		fmt.Printf("SUCCESS: %s is up and running!\n", api)
+		go checkAPI(api)
 	}
 
 	elapsed := time.Since(start)
