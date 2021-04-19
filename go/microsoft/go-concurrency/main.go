@@ -34,7 +34,9 @@ func main() {
 		go checkAPI(api, ch)
 	}
 
-	fmt.Println(<-ch)
+	for i := 0; i < len(apis); i++ {
+		fmt.Println(<-ch)
+	}
 
 	elapsed := time.Since(start)
 	fmt.Printf("Done! It took %v seconds!\n", elapsed.Seconds())
