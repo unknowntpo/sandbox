@@ -6,18 +6,20 @@ import (
 	"time"
 )
 
-func checkAPI(api string) {
+func checkAPI(api string, ch chan string) {
 	_, err := http.Get(api)
 	if err != nil {
-		fmt.Printf("ERROR: %s is down!\n", api)
+		ch <- fmt.Sprintf("ERROR: %s is down!\n", api)
 		return
 	}
 
-	fmt.Printf("SUCCESS: %s is up and running!\n", api)
+	ch <- fmt.Sprintf("SUCCESS: %s is up and running!\n", api)
 }
 
 func main() {
 	start := time.Now()
+
+	ch := make(chan string)
 
 	apis := []string{
 		"https://management.azure.com",
@@ -29,8 +31,10 @@ func main() {
 	}
 
 	for _, api := range apis {
-		go checkAPI(api)
+		go checkAPI(api, ch)
 	}
+
+	fmt.Println(<-ch)
 
 	elapsed := time.Since(start)
 	fmt.Printf("Done! It took %v seconds!\n", elapsed.Seconds())
