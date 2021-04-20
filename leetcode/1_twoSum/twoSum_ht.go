@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
-	//	"github.com/unknowntpo/hashmap"
+//"fmt"
+//	"github.com/unknowntpo/hashmap"
 )
 
 /*
@@ -70,9 +70,4 @@ func appendIdxUnique(idxSlice []int, idx int) []int {
 	return idxSlice
 }
 func main() {
-	target := 6
-	//nums := []int{2, 7, 11, 15}
-	nums := []int{3, 2, 4}
-	res := twoSum(nums, target)
-	fmt.Println(res)
 }
