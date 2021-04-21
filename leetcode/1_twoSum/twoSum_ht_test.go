@@ -13,25 +13,28 @@ func TestTwoSum(t *testing.T) {
 	}{
 		{"test for even target with nums contains target / 2",
 			[]int{3, 2, 4},
-			6, []int{1, 2},
+			6,
+			[]int{1, 2},
 		},
 		{"test for even target with nums contains two element == target / 2",
 			[]int{3, 3},
-			6, []int{0, 1},
+			6,
+			[]int{0, 1},
 		},
 	}
 
 	for _, tt := range tests {
-		got := twoSum(tt.nums, tt.target)
-		if !sameWithoutOrder(got, tt.want) {
-			t.Errorf("Wrong answer, got %v, want %v", got, tt.want)
-		}
-
+		t.Run(tt.name, func(t *testing.T) {
+			got := twoSumGoMap(tt.nums, tt.target)
+			if !sameWithoutOrder(t, got, tt.want) {
+				t.Errorf("Wrong answer, got %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
 
 // sameWithoutOrder check whether a, b has same element, the order of element doesn't need to be the same.
-func sameWithoutOrder(a, b []int) bool {
+func sameWithoutOrder(t *testing.T, a, b []int) bool {
 	t.Helper()
 	if len(a) != len(b) {
 		return false

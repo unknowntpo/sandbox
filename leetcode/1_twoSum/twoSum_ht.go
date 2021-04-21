@@ -31,26 +31,32 @@ func twoSum(nums []int, target int) []int {
 	return res
 }
 */
-func twoSum(nums []int, target int) []int {
+func twoSumGoMap(nums []int, target int) []int {
 	res := make([]int, 0)
 
 	m := make(map[int]int)
+	// for edge case [3 3] target = 6, which means that refcnt[3] == 2
+	refcnt := make(map[int]int)
 
 	// add element of nums as key, and the index of element in nums as value
 	for i, v := range nums {
 		m[v] = i
+		refcnt[v]++
 	}
 
-	for _, num := range nums {
+	for i, num := range nums {
+		// take number 'num' from nums
+		refcnt[num]--
 		wantKey := target - num
-		// Make sure the value of wantKey exist and wantKey not equal to num itself, because it doesn't match the meaning to twoSum, e.g. [3, 2, 4] -> if key == 3, then wantKey will be 3, too.
-		if wantKey == num {
-			continue
-		}
 		// look up map to get key index
 		wantKeyIdx, ok := m[wantKey]
 		if ok {
-			res = appendIdxUnique(res, wantKeyIdx)
+			// if no more key "wantKey" to take
+			if refcnt[wantKey] > 0 {
+				refcnt[wantKey]--
+				res = appendIdxUnique(res, wantKeyIdx)
+				res = appendIdxUnique(res, i)
+			}
 		}
 	}
 
