@@ -23,14 +23,29 @@ func TestTwoSum(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := twoSumGoMap(tt.nums, tt.target)
-			if !sameWithoutOrder(t, got, tt.want) {
-				t.Errorf("Wrong answer, got %v, want %v", got, tt.want)
-			}
-		})
-	}
+	t.Run("Go Map slow version", func(t *testing.T) {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				got := twoSumGoMapSlow(tt.nums, tt.target)
+				if !sameWithoutOrder(t, got, tt.want) {
+					t.Errorf("Wrong answer, got %v, want %v", got, tt.want)
+				}
+			})
+		}
+
+	})
+	t.Run("Go Map fast version", func(t *testing.T) {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				got := twoSumGoMapFast(tt.nums, tt.target)
+				if !sameWithoutOrder(t, got, tt.want) {
+					t.Errorf("Wrong answer, got %v, want %v", got, tt.want)
+				}
+			})
+		}
+
+	})
+
 }
 
 // sameWithoutOrder check whether a, b has same element, the order of element doesn't need to be the same.

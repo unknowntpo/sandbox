@@ -31,7 +31,7 @@ func twoSum(nums []int, target int) []int {
 	return res
 }
 */
-func twoSumGoMap(nums []int, target int) []int {
+func twoSumGoMapSlow(nums []int, target int) []int {
 	res := make([]int, 0)
 
 	m := make(map[int]int)
@@ -74,6 +74,30 @@ func appendIdxUnique(idxSlice []int, idx int) []int {
 	// if num not in nums
 	idxSlice = append(idxSlice, idx)
 	return idxSlice
+}
+
+func twoSumGoMapFast(nums []int, target int) []int {
+	m := make(map[int]int)
+	/*
+		// Use current number's pair's value as key in map accessing.
+		for i, v := range nums {
+			if pair_Idx, prs := m[v]; prs {
+				return []int{i, pairIdx}
+			} else {
+				m[target-v] = i
+			}
+		}
+	*/
+	// Use current number's value as key in map accessing.
+	for i, v := range nums {
+		if pairIdx, prs := m[target-v]; prs {
+			return []int{i, pairIdx}
+		} else {
+			m[v] = i
+		}
+	}
+
+	return []int{}
 }
 func main() {
 }
