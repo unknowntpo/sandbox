@@ -5,14 +5,13 @@ import (
 	"sync"
 )
 
+// Rewrite gen to copy the list of integers into a buffered channel and avoid creating a new goroutine.
 func gen(nums ...int) <-chan int {
-	out := make(chan int)
-	go func() {
-		for _, n := range nums {
-			out <- n
-		}
-		close(out)
-	}()
+	out := make(chan int, len(nums))
+	for _, n := range nums {
+		out <- n
+	}
+	close(out)
 	return out
 }
 
@@ -29,7 +28,7 @@ func sq(in <-chan int) <-chan int {
 
 func merge(cs ...<-chan int) <-chan int {
 	var wg sync.WaitGroup
-	out := make(chan int)
+	out := make(chan int, 1) // enough space for the unread inputs
 
 	// Start an output goroutine for each input channel in cs.  output
 	// copies values from c to out until c is closed, then calls wg.Done.
