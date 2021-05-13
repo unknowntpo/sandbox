@@ -166,7 +166,9 @@ func (t *Tree) Show(f ShowFunc) {
 		return
 	}
 	if t.root != nil {
-		t.root.showInOrder(f)
+		fmt.Println("Iterative Pre order traversal:")
+		t.root.showPreOrderIter(f)
+		//t.root.showInOrder(f)
 		fmt.Println()
 		return
 	}
@@ -180,6 +182,29 @@ func (n *Node) showInOrder(f ShowFunc) {
 		n.Left.showInOrder(f)
 		f(n.Key)
 		n.Right.showInOrder(f)
+	}
+}
+
+func (n *Node) showPreOrderIter(f ShowFunc) {
+	stack := make([]*Node, 0)
+	// Push root to stack
+	stack = append(stack, n)
+	for len(stack) != 0 {
+		// node points to top of stack
+		node := stack[len(stack)-1]
+
+		// pop the element at top of stack
+		stack = stack[:len(stack)-1]
+
+		f(node.Key)
+
+		if node.Right != nil {
+			stack = append(stack, node.Right)
+		}
+
+		if node.Left != nil {
+			stack = append(stack, node.Left)
+		}
 	}
 }
 
