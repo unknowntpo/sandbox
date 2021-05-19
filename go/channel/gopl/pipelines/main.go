@@ -16,11 +16,7 @@ func main() {
 
 	// Squarer
 	go func() {
-		for {
-			x, ok := <-natural
-			if !ok {
-				break
-			}
+		for x := range natural {
 			squares <- x * x
 		}
 		close(squares)
