@@ -7,24 +7,26 @@ import (
 	//"strings"
 )
 
-type StringReader struct {
-	s string
-	i int64 // index of current position of reading at s
+type Reader struct {
+	s string // store the data to be read.
+	i int64  // point to the first unread byte.
 }
 
-// NewReader returns a new Reader reading from s
-func NewReader(s string) *StringReader {
-	return &StringReader{s, 0}
+// NewReader convert a string s to Reader.
+func NewReader(s string) *Reader {
+	return &Reader{s: s, i: 0}
 }
 
-// Implement Read method, and it will become a io.Reader
-func (r *StringReader) Read(p []byte) (n int, err error) {
+// Reader reads up to len(p) bytes from Reader r to buffer p.
+// Returns total bytes it read, and error if occured.
+func (r *Reader) Read(p []byte) (n int, err error) {
 	if r.i >= int64(len(r.s)) {
 		return 0, io.EOF
 	}
+
 	n = copy(p, r.s[r.i:])
-	fmt.Println(n)
 	r.i += int64(n)
+
 	return
 }
 
