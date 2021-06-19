@@ -1,20 +1,19 @@
-// Hello world! Cplayground is an online sandbox that makes it easy to try out
-// code.
-
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #define CUR_DIR 0
 #define PRE_DIR 1
 #define NEXT_DIR 2
+#define DEBUG 0
 
 int parseToken (char *);
 void showLog (char **, int);
 
 int minOperations(char **logs, int logsSize){
     int level = 0 ;
+#if DEBUG
     showLog(logs, 5);
-
+#endif
     for (int i = 0; i < logsSize; i++) {
         switch (parseToken(logs[i])) {
             case CUR_DIR:
@@ -32,8 +31,11 @@ int minOperations(char **logs, int logsSize){
 }
 
 int parseToken (char *token) {
-    if (strcmp(token, "./") == CUR_DIR) return CUR_DIR;
-    if (strcmp(token, "../") == PRE_DIR) return PRE_DIR;
+#if DEBUG
+    printf("inside parseToken: token: %s\n", token);
+#endif
+    if (strcmp(token, "./") == 0) return CUR_DIR;
+    if (strcmp(token, "../") == 0) return PRE_DIR;
     return NEXT_DIR;
 }
 
@@ -51,11 +53,9 @@ int main() {
         "d21/",
         "./",
     };
-    int r = parseToken(logs[0]);
-    printf("parseToken: %d\n", r);
-
-    printf("After init:\n");
+#if DEBUG
     showLog(logs, 5);
+#endif
     int res = minOperations(logs, 5);
     printf("\nResult: %d\n", res);
 }
