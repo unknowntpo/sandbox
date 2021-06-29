@@ -41,12 +41,12 @@ func checkPostiveAndEven(num int) error {
 
 	err := checkPositive(num)
 	if err != nil {
-		return err
+		return fmt.Errorf("checkPostiveAndEven: %w", err)
 	}
 
 	err = checkEven(num)
 	if err != nil {
-		return err
+		return fmt.Errorf("checkPostiveAndEven: %w", err)
 	}
 
 	return nil
