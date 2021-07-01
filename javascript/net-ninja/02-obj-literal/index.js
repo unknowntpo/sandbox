@@ -1,3 +1,4 @@
+// user can't be reassigned.
 const user = {
   mail: "e850506@gmail.com",
   name: "Eric",
@@ -13,4 +14,5 @@ const user = {
 
 console.log(user);
 user.login();
+user.name = "Denny";
 user.logout();
