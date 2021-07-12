@@ -1,2 +1,5 @@
 # debug symbols in macos.
 *.dSYM
+
+# executables
+ex01 ex03

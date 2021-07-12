@@ -4,4 +4,4 @@ all: ex1
 
 .PHONY: clean
 clean:
-	rm -f ex1
+	rm -f ex1 ex3
