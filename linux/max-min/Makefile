@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall
-TARGET = max0 max2 typeof
+TARGET = max0 max2 max3 typeof
 
 all: $(TARGET)
 
@@ -11,6 +11,8 @@ max0: max0.c
 max2: max2.c
 	$(CC) $(CFLAGS) -o $@ $<
 
+max3: max3.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 typeof: typeof.c
 	$(CC) $(CFLAGS) -o $@ $<
@@ -18,4 +20,4 @@ typeof: typeof.c
 
 .PHONY: clean
 clean:
-	-rm -f $(TARGET)
+	-rm -rf $(TARGET) *.dSYM
