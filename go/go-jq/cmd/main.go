@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 type Formatter struct {
 	indent int
@@ -43,16 +47,26 @@ func (f *Formatter) Clear() {
 }
 
 func main() {
-	inputs := []string{
-		`{"task": {"id": 1,"title": "hello","content": "do some homework","done": true,"version": 1}}`,
-		`{"messages": ["hello","hello","hello"]}`,
-	}
+	/*
+		inputs := []string{
+			`{"task": {"id": 1,"title": "hello","content": "do some homework","done": true,"version": 1}}`,
+			`{"messages": ["hello","hello","hello"]}`,
+		}
+
+		f := NewFormatter(4)
+		for _, in := range inputs {
+			f.Format([]byte(in))
+			fmt.Println(string(f.out))
+			f.Clear()
+			fmt.Println()
+		}
+	*/
+	var reader = bufio.NewReader(os.Stdin)
+	in, _ := reader.ReadString('\n')
 
 	f := NewFormatter(4)
-	for _, in := range inputs {
-		f.Format([]byte(in))
-		fmt.Println(string(f.out))
-		f.Clear()
-		fmt.Println()
-	}
+	f.Format([]byte(in))
+	fmt.Println(string(f.out))
+	f.Clear()
+	fmt.Println()
 }
