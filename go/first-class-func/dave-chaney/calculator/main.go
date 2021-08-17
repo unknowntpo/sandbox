@@ -1,34 +1,34 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type Calculator struct {
 	acc float64
 }
 
-const (
-	OP_ADD = 1 << iota
-	OP_SUB
-	OP_MUL
-)
+type opfunc func(float64, float64) float64
 
-func (c *Calculator) Do(op int, v float64) float64 {
-	switch op {
-	case OP_ADD:
-		c.acc += v
-	case OP_SUB:
-		c.acc -= v
-	case OP_MUL:
-		c.acc *= v
-	default:
-		panic("unhandled operation")
-	}
+func (c *Calculator) Do(op opfunc, v float64) float64 {
+	c.acc = op(c.acc, v)
 	return c.acc
 }
 
+func Add(a, b float64) float64 { return a + b }
+func Sub(a, b float64) float64 { return a - b }
+func Mul(a, b float64) float64 { return a * b }
+func Div(a, b float64) float64 { return a / b }
+
+// TODO: We don't want to pass in useless arguments.
+func Sqrt(n, _ float64) float64 { return math.Sqrt(n) }
+
 func main() {
 	var c Calculator
-	fmt.Println(c.Do(OP_ADD, 100)) // 100
-	fmt.Println(c.Do(OP_SUB, 50))  // 50
-	fmt.Println(c.Do(OP_MUL, 2))   // 100
+	fmt.Println(c.Do(Add, 100)) // 100
+	fmt.Println(c.Do(Sub, 50))  // 50
+	fmt.Println(c.Do(Mul, 2))   // 100
+	fmt.Println(c.Do(Div, 2))   // 50
+	fmt.Println(c.Do(Sqrt, 0))  // 7.0710678118654755
 }
