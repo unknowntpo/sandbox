@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -30,11 +34,11 @@ func New(maxJobs, maxWorkers int) *Pool {
 
 	return p
 }
-func (p *Pool) Start() {
+func (p *Pool) Start(ctx context.Context) {
 	// Dispatch workers.
+	p.wg.Add(p.maxWorkers)
 	for i := 0; i < p.maxWorkers; i++ {
-		p.wg.Add(p.maxWorkers)
-		go p.worker(p.workerChan)
+		go p.worker(ctx)
 	}
 
 	go func() {
@@ -44,8 +48,10 @@ func (p *Pool) Start() {
 			// Dispatch it to workers.
 			case job := <-p.jobChan:
 				fmt.Println("pool send a job to workerChan")
-
 				p.workerChan <- job
+			case <-ctx.Done():
+				fmt.Println("Pool received cancel")
+				return
 			default:
 			}
 		}
@@ -67,30 +73,54 @@ func (p *Pool) Schedule(job jobFunc) {
 }
 
 // worker is the worker that execute the job received from p.workerChan.
-func (p *Pool) worker(c chan jobFunc) {
+func (p *Pool) worker(ctx context.Context) {
+	defer p.wg.Done()
 	for {
 		select {
 		case job := <-p.workerChan:
 			fmt.Println("worker received a job")
 			job()
-		default:
+		case <-ctx.Done():
+			fmt.Println("worker retired!")
+			return
 		}
 	}
 }
 
 func main() {
 	p := New(5, 5)
-	//ctx, cancel := context.WithCancel(context.Background())
-	//defer cancel()
-	//p.Start(ctx)
-	fmt.Printf("%#v\n", *p)
-	p.Start()
-	// The caller should not be blocked.
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	p.Start(ctx)
+
+	complete := make(chan struct{})
+	go func() {
+		sig := make(chan os.Signal, 1)
+		signal.Notify(sig, syscall.SIGINT)
+
+		<-sig
+		// shutdown workerpool
+		fmt.Println("Received SIGINT")
+		cancel()
+		p.Wait()
+		complete <- struct{}{}
+	}()
+
 	p.Schedule(func() {
+		defer fmt.Println("Sleeper exited")
+		timeout := time.After(3 * time.Second)
 		for {
-			time.Sleep(1 * time.Second)
-			fmt.Println("slept for 1 second.")
+			select {
+			case <-timeout:
+				fmt.Println("wake up!")
+				return
+			default:
+				time.Sleep(1 * time.Second)
+				fmt.Println("slept for 1 second.")
+			}
 		}
 	})
-	p.Wait()
+
+	<-complete
+	fmt.Println("Shutdown complete")
 }
