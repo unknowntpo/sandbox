@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"./terminal"
 )
 
 const (
@@ -27,13 +29,17 @@ func NewMultibar(numBars int, length int) *Multibar {
 }
 
 func (m *Multibar) Render() {
-	for {
-		// TODO: jump back to beginning of bar 0
+	for dummyCounter := 0; dummyCounter < 50; dummyCounter++ {
+		// TODO: Wait for all task complete and clean up terminal.
 		for i, _ := range m.bars {
+			//clearCurrentLine()
 			m.bars[i].Render()
+			fmt.Print("\n")
 		}
+		terminal.MoveCursorBeginning(len(m.bars))
 		time.Sleep(100 * time.Millisecond)
 	}
+	terminal.MoveCursorDown(len(m.bars))
 }
 
 type ProgressBar struct {
