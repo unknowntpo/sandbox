@@ -68,6 +68,6 @@ func (p *ProgressBar) Render() {
 }
 
 func main() {
-	multiBar := NewMultibar(5, 10)
+	multiBar := NewMultibar(5, 50)
 	multiBar.Render()
 }
