@@ -9,6 +9,7 @@ import (
 	"runtime/pprof"
 	"strconv"
 	"strings"
+	"testing"
 )
 
 func foo(n int) string {
@@ -46,7 +47,7 @@ func main() {
 		fmt.Println("Test FAIL")
 	}
 
-	for i := 0; i < 100; i++ {
+	fmt.Println("Allocs:", int(testing.AllocsPerRun(100, func() {
 		foo(rand.Int())
-	}
+	})))
 }
