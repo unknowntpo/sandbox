@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"fmt"
 	"math/rand"
@@ -13,12 +12,13 @@ import (
 )
 
 func foo(n int) string {
-	var buf bytes.Buffer
+
 	x := strconv.Itoa(n)
+	buf := make([]byte, 0, 100000*len(x))
 	for i := 0; i < 100000; i++ {
-		buf.WriteString(x)
+		buf = append(buf, x...)
 	}
-	sum := sha256.Sum256(buf.Bytes())
+	sum := sha256.Sum256(buf)
 
 	b := make([]byte, 0, int(sum[0]))
 	for i := 0; i < int(sum[0]); i++ {
