@@ -9,6 +9,7 @@ import (
 	"runtime/pprof"
 	"strconv"
 	"testing"
+	"unsafe"
 )
 
 func foo(n int) string {
@@ -25,7 +26,7 @@ func foo(n int) string {
 		c := "abcdefghijklmnopqrstuvwxyz"[x%26]
 		b = append(b, c)
 	}
-	return string(b)
+	return *(*string)(unsafe.Pointer(&b))
 }
 
 func main() {
