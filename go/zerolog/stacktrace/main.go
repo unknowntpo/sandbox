@@ -24,18 +24,20 @@ func main() {
 }
 
 func inner() error {
+
 	// Record the stack.
-	//return errors.Wrap(ErrDummy, "inner error")
+	return errors.Wrap(ErrDummy, "inner error")
+	//return ErrDummy
 	//return errors.WithMessage(ErrDummy, "inner error")
-	return ErrDummy
 }
 
 func middle() error {
 	err := inner()
 	if err != nil {
-		return errors.Errorf("middle error: %v", err)
+		//return errors.Errorf("middle error: %v", err)
 		//return errors.WithMessage(err, "middle error")
 		//return errors.Wrap(err, "middle")
+		return err
 	}
 	return nil
 }
@@ -43,11 +45,10 @@ func middle() error {
 func outer() error {
 	err := middle()
 	if err != nil {
-		return errors.Errorf("outer error: %v", err)
-		//return errors.WithMessage(err, "outer error")
+		//	return errors.Errorf("outer error: %v", err)
 		//return errors.Wrap(err, "outer")
-		//return errors.WithMessage(err, "outer error")
-
+		return errors.WithMessage(err, "outer error")
+		//return err
 	}
 	return nil
 }
