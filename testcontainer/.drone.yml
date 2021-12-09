@@ -20,13 +20,13 @@ steps:
     settings:
       # This specifies the command that should be executed to perform build, test and
       #  integration tests. Not to be confused with Drone's `command`:
-      cmd: sleep 5 && ./gradlew clean check --info
+      cmd: go version
       # This image will run the cmd with your build steps
-      build_image: adoptopenjdk:14-openj9
+      build_image: golang:1.16-alpine
       # Not mandatory; enables pre-fetching of images in parallel with the build, so may save 
       #  time:
       prefetch_images:
-        - "redis:4.0.6"
+        # - "redis:4.0.6"
       volumes:
         - name: dockersock
           path: /var/run
