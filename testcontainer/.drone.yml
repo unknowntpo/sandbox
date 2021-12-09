@@ -1,0 +1,46 @@
+kind: pipeline
+type: docker
+name: default
+steps:
+  - name: deploy
+    image: docker:20-dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+    commands:
+      - sleep 20
+      - docker info
+  - name: build
+    image: quay.io/testcontainers/dind-drone-plugin
+    privileged: true
+    environment:
+      DOCKER_DRIVER: vfs # vfs works
+      CI_WORKSPACE: "/drone/src"
+    settings:
+      # This specifies the command that should be executed to perform build, test and
+      #  integration tests. Not to be confused with Drone's `command`:
+      cmd: sleep 5 && ./gradlew clean check --info
+      # This image will run the cmd with your build steps
+      build_image: adoptopenjdk:14-openj9
+      # Not mandatory; enables pre-fetching of images in parallel with the build, so may save 
+      #  time:
+      prefetch_images:
+        - "redis:4.0.6"
+      volumes:
+        - name: dockersock
+          path: /var/run
+# Specify docker:dind as a service
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  environment:
+    DOCKER_DRIVER: vfs
+  debug: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+volumes:
+- name: dockersock
+  temp: {}
