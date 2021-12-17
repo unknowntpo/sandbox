@@ -4,7 +4,7 @@ import "testing"
 
 func BenchmarkFalsesharing(b *testing.B) {
 	// prepare slice
-	veryBigSlice := make([]int, 10000)
+	veryBigSlice := make([]int, 100000)
 	for i := range veryBigSlice {
 		veryBigSlice[i] = i
 	}

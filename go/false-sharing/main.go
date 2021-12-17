@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	//"unsafe"
 )
 
 func workerThread_1(veryBigSlice []int, index, n int, wg *sync.WaitGroup) {
@@ -22,12 +23,11 @@ func false_sharing(in []int) {
 	wg.Wait()
 }
 
-func workerThread_2(veryBigSlice []int, index, n int, wg *sync.WaitGroup) {
+func workerThread_2(veryBigSlice []int, startIdx, workerCount int, wg *sync.WaitGroup) {
 	defer wg.Done()
-	cacheLineSize := 64
-	for i := index; i < len(veryBigSlice); i = i + n*cacheLineSize/8 {
-		for j := 0; j < cacheLineSize && i+j < len(veryBigSlice); j++ {
-			veryBigSlice[i+j] = veryBigSlice[i+j] + 1
+	for i := startIdx; i < len(veryBigSlice); i = i + elesInALine*workerCount {
+		for j := 0; j < elesInALine && i+j < len(veryBigSlice); j++ {
+			veryBigSlice[i+j]++
 		}
 	}
 }
@@ -37,13 +37,21 @@ func not_false_sharing(in []int) {
 	wg := &sync.WaitGroup{}
 	wg.Add(workerCount)
 	for i := 0; i < workerCount; i++ {
-		go workerThread_2(in, i, workerCount, wg)
+		go workerThread_2(in, i*elesInALine, workerCount, wg)
 	}
 	wg.Wait()
 }
 
+const cacheLineSize = 64 // bytes
+// TODO: Use unsafe.Sizeof to get size of int
+//elesInALine := cacheLineSize / *(*int)(unsafe.Pointer(unsafe.Sizeof(int(0))))
+const elesInALine = cacheLineSize / 4
+
 func main() {
-	veryBigSlice := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	veryBigSlice := make([]int, 64)
+	for i := 0; i < 64; i++ {
+		veryBigSlice[i] = i
+	}
 
 	not_false_sharing(veryBigSlice)
 	//false_sharing(veryBigSlice)
