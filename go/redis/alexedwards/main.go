@@ -8,26 +8,34 @@ import (
 )
 
 func main() {
-	// Establish a connection to the Redis server listening on port
-	// 6379 of the local machine. 6379 is the default port, so unless
-	// you've already changed the Redis configuration file this should
-	// work.
+	must(addAlbum(2, "Electric Ladyland", "Jimi Hendrix", 4.95, 8))
+}
+
+func must(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func addAlbum(id int, title, artist string, price float64, likes int) error {
 	conn, err := redis.Dial("tcp", "localhost:6379")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("addAlbum: %v", err)
 	}
-	// Importantly, use defer to ensure the connection is always
-	// properly closed before exiting the main() function.
 	defer conn.Close()
 
-	// Send our command across the connection. The first parameter to
-	// Do() is always the name of the Redis command (in this example
-	// HMSET), optionally followed by any necessary arguments (in this
-	// example the key, followed by the various hash fields and values).
-	_, err = conn.Do("HMSET", "album:2", "title", "Electric Ladyland", "artist", "Jimi Hendrix", "price", 4.95, "likes", 8)
+	_, err = conn.Do(
+		"HMSET",
+		fmt.Sprintf("album:%d", id),
+		"title", title,
+		"artist", artist,
+		"price", price,
+		"likes", likes,
+	)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("addAlbum: %v", err)
 	}
 
-	fmt.Println("Electric Ladyland added!")
+	log.Println(title, " added!")
+	return nil
 }
