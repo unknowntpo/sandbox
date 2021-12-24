@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -16,7 +18,16 @@ var (
 	port          int = 4444
 )
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+type TokenInfo struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	Scope       string `json:"scope"`
+}
+type application struct {
+	tokenInfo *TokenInfo
+}
+
+func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 	/*
 		GET https://github.com/login/oauth/authorize
 		client_id= ...
@@ -39,29 +50,29 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirURL, http.StatusSeeOther)
 }
 
-func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("hello"))
-
-	// extract code from r params
-	// send request to get access token
-	// POST https://github.com/login/oauth/access_token
-	// params:
-	// client_id
-	// client_secret
-	// code
-	// redirect
-	code := r.URL.Query().Get("code")
-	if code == "" {
-		fmt.Fprintf(w, "failed to get code from url parameter")
+func (app *application) callbackHandler(w http.ResponseWriter, r *http.Request) {
+	tInfo, err := getTokenInfo(r)
+	if err != nil {
+		log.Printf("failed to get token information from github callback redirection: %v", err)
 		return
 	}
-	fmt.Fprintf(w, "code: %s", code)
+	app.tokenInfo = tInfo
+	redirURL := fmt.Sprintf("http://localhost:%d/", port)
+	http.Redirect(w, r, redirURL, http.StatusSeeOther)
+}
+
+// getAccessToken returns the access token of specific user.
+func getTokenInfo(r *http.Request) (tInfo *TokenInfo, err error) {
+	code := r.URL.Query().Get("code")
+	if code == "" {
+		err = errors.New("failed to get code from url parameter")
+	}
 
 	client := http.Client{}
 
-	r, err := http.NewRequest(http.MethodPost, "https://github.com/login/oauth/access_token", nil)
+	r, err = http.NewRequest(http.MethodPost, "https://github.com/login/oauth/access_token", nil)
 	if err != nil {
-		fmt.Fprintf(w, "failed to send request: %v", err)
+		err = fmt.Errorf("failed to send request: %v", err)
 		return
 	}
 	q := url.Values{}
@@ -76,21 +87,32 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := client.Do(r)
 	if err != nil {
-		fmt.Fprintf(w, "failed to send request: %v", err)
+		err = fmt.Errorf("failed to send request: %v", err)
 		return
 	}
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Fprintf(w, "failed to read resp body: %v", err)
+		err = fmt.Errorf("failed to read resp body: %v", err)
 		return
 	}
 	fmt.Println("response: \n", string(b))
 	// TODO: parse response body and access github user repo
+
+	// {"access_token":"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","token_type":"bearer","scope":"repo,user"}
+	tInfo = &TokenInfo{}
+	err = json.Unmarshal(b, tInfo)
+	if err != nil {
+		err = fmt.Errorf("failed to unmarshal response from github: %v", err)
+		return
+	}
+	log.Printf("%+v", tInfo)
+
+	return
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello"))
-	// TOOD: Display user information get from github
+	// TODO: Display user information get from github based on app.tokenInfo
 	/*
 		Authorization: token OAUTH-TOKEN
 		GET https://api.github.com/user
@@ -98,10 +120,11 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	app := &application{}
 	mux := http.NewServeMux()
-	mux.HandleFunc("/login", loginHandler)
-	mux.HandleFunc("/callback", callbackHandler)
-	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/login", app.loginHandler)
+	mux.HandleFunc("/callback", app.callbackHandler)
+	mux.HandleFunc("/", app.homeHandler)
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
