@@ -1,0 +1,433 @@
+basePath: /
+definitions:
+  api.AuthenticationRequestBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  api.AuthenticationResponse:
+    properties:
+      token:
+        $ref: '#/definitions/domain.Token'
+    type: object
+  api.CreateTaskRequest:
+    properties:
+      content:
+        type: string
+      done:
+        type: boolean
+      title:
+        type: string
+    type: object
+  api.DeleteTaskByIDResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  api.GetAllTasksResponse:
+    properties:
+      metadata:
+        $ref: '#/definitions/domain.Metadata'
+      tasks:
+        items:
+          $ref: '#/definitions/domain.Task'
+        type: array
+    type: object
+  api.HealthcheckResponse:
+    properties:
+      environment:
+        type: string
+      status:
+        type: string
+      version:
+        type: string
+    type: object
+  api.UpdateTaskByIDRequest:
+    properties:
+      content:
+        type: string
+      done:
+        type: boolean
+      title:
+        type: string
+    type: object
+  api.UserActivationResponse:
+    properties:
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  api.UserRegistrationRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  api.UserRegistrationResponse:
+    properties:
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  domain.Metadata:
+    properties:
+      current_page:
+        type: integer
+      first_page:
+        type: integer
+      last_page:
+        type: integer
+      page_size:
+        type: integer
+      total_records:
+        type: integer
+    type: object
+  domain.Task:
+    properties:
+      content:
+        description: task content
+        type: string
+      done:
+        description: true if task is done
+        type: boolean
+      id:
+        description: Unique integer ID for the task
+        type: integer
+      title:
+        description: task title
+        type: string
+      user_id:
+        description: integer ID for the task owner
+        type: integer
+      version:
+        description: The version number starts at 1 and will be incremented each
+        type: integer
+    type: object
+  domain.Token:
+    properties:
+      expiry:
+        type: string
+      token:
+        type: string
+    type: object
+  domain.User:
+    properties:
+      activated:
+        type: boolean
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  reactor.ErrorResponse:
+    properties:
+      error:
+        type: object
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: This is the api documentation of TODOS server.
+  title: TODOS API
+  version: "1.0"
+paths:
+  /v1/healthcheck:
+    get:
+      description: None.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.HealthcheckResponse'
+      summary: Show status of service.
+  /v1/tasks:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: title filter
+        in: query
+        name: title
+        type: string
+      - description: sort filter
+        in: query
+        name: sort
+        type: string
+      - description: id filter
+        in: query
+        name: id
+        type: string
+      - description: page filter
+        in: query
+        name: page
+        type: string
+      - description: page size filter
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.GetAllTasksResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Get all tasks for specific user.
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create task request body
+        in: body
+        name: reqBody
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Create a new task for specific user.
+  /v1/tasks/{taskID}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.DeleteTaskByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Delete task for specific user.
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.GetAllTasksResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Get task by ID for specific user.
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      - description: request body
+        in: body
+        name: reqBody
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateTaskByIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Update task for specific user.
+  /v1/tokens/authentication:
+    post:
+      consumes:
+      - application/json
+      description: None.
+      parameters:
+      - description: authentication request body
+        in: body
+        name: authentication_request_body
+        required: true
+        schema:
+          $ref: '#/definitions/api.AuthenticationRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.AuthenticationResponse'
+      summary: Create authentication token for user.
+  /v1/users/activation:
+    put:
+      parameters:
+      - description: activation token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.UserActivationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Activate user based on given token.
+  /v1/users/registration:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request body
+        in: body
+        name: reqBody
+        required: true
+        schema:
+          $ref: '#/definitions/api.UserRegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/api.UserRegistrationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/reactor.ErrorResponse'
+      summary: Register user based on given information.
+schemes:
+- http
+- https
+swagger: "2.0"
