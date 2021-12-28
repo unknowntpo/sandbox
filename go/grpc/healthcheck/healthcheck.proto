@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/unknowntpo/sandbox/go/grpc";
+
+
+package healthcheck;
+
+service Healthchecker {
+    rpc Healthcheck (HealthcheckRequest) returns (HealthcheckReply) {}
+}
+
+// The request message. 
+message HealthcheckRequest {
+    string message = 1;
+}
+
+// The reply message. 
+message HealthcheckReply {
+    string message = 1;
+}
