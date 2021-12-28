@@ -36,4 +36,43 @@ func NewOpenAPI3() openapi3.Swagger {
 		},
 	}
 	// TODO: add more things
+	// Schemas
+	swagger.Components.Schemas = openapi3.Schemas{
+		/*
+			"Priority": openapi3.NewSchemaRef("",
+				openapi3.NewStringSchema().
+					WithEnum("none", "low", "medium", "high").
+					WithDefault("none")),
+			"Dates": openapi3.NewSchemaRef("",
+				openapi3.NewObjectSchema().
+					WithProperty("start", openapi3.NewStringSchema().
+						WithFormat("date-time").
+						WithNullable()).
+					WithProperty("due", openapi3.NewStringSchema().
+						WithFormat("date-time").
+						WithNullable())),
+			"Task": openapi3.NewSchemaRef("",
+				openapi3.NewObjectSchema().
+					WithProperty("id", openapi3.NewUUIDSchema()).
+					WithProperty("description", openapi3.NewStringSchema()).
+					WithProperty("is_done", openapi3.NewBoolSchema()).
+					WithPropertyRef("priority", &openapi3.SchemaRef{
+						Ref: "#/components/schemas/Priority",
+					}).
+					WithPropertyRef("dates", &openapi3.SchemaRef{
+						Ref: "#/components/schemas/Dates",
+					})),
+		*/
+		"api.AuthenticationRequestBody": openapi3.NewSchemaRef(
+			"",
+			openapi3.NewObjectSchema().
+				WithProperty("email", openapi3.NewStringSchema()).
+				WithProperty("password", openapi3.NewStringSchema())),
+		"api.AuthenticationResponse": openapi3.NewSchemaRef(
+			"",
+			openapi3.NewObjectSchema().
+				WithProperty("token", &openapi.SchemaRef{
+					Ref: "#/components/schemas/domain.Token",
+				})),
+	}
 }
