@@ -27,6 +27,8 @@ type application struct {
 	tokenInfo *TokenInfo
 }
 
+var myTokenInfo *TokenInfo
+
 func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 	/*
 		GET https://github.com/login/oauth/authorize
@@ -106,17 +108,45 @@ func getTokenInfo(r *http.Request) (tInfo *TokenInfo, err error) {
 		return
 	}
 	log.Printf("%+v", tInfo)
-
+	myTokenInfo = tInfo
 	return
 }
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello"))
 	// TODO: Display user information get from github based on app.tokenInfo
 	/*
 		Authorization: token OAUTH-TOKEN
 		GET https://api.github.com/user
+		curl -H "Authorization: token ${TOKEN}" https://api.github.com/user
 	*/
+	// send get req to github
+
+	if myTokenInfo == nil {
+		// User needs to login first
+		redirURL := fmt.Sprintf("http://localhost:%d/login", port)
+		http.Redirect(w, r, redirURL, http.StatusSeeOther)
+		return
+	}
+	client := http.Client{}
+
+	r, err := http.NewRequest(http.MethodGet, "https://api.github.com/user", nil)
+	if err != nil {
+		fmt.Errorf("failed to create new request to get user info from github: %v", err)
+	}
+
+	r.Header.Set("Authorization", fmt.Sprintf("token %s", myTokenInfo.AccessToken))
+
+	resp, err := client.Do(r)
+	if err != nil {
+		fmt.Errorf("failed to send request: %v", err)
+		return
+	}
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Errorf("failed to read resp body: %v", err)
+		return
+	}
+	fmt.Fprintf(w, "response: %s\n", string(b))
 }
 
 func main() {
