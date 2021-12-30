@@ -1,0 +1,14 @@
+{
+  "name": "jest_practice",
+  "version": "1.0.0",
+  "description": "Just do some test writting practice.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "unknowntpo",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.4.5"
+  }
+}
