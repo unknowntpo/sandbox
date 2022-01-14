@@ -1,0 +1,6 @@
+*.swp
+*.dSYM
+*.o
+*.d
+*.swp
+counter
