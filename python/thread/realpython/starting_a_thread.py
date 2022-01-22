@@ -12,6 +12,11 @@ if __name__ == "__main__":
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     logging.info("Main    : before creating thread")
     
+
+
+
+    # Ref: Daemon Threads: https://realpython.com/intro-to-python-threading/#daemon-threads 
+    #x = threading.Thread(target=thread_function, args=(1,), daemon=True)
     x = threading.Thread(target=thread_function, args=(1,))
     logging.info("Main    : before running thread")
     x.start()
