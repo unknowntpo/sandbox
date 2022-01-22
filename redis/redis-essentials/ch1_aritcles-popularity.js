@@ -1,19 +1,19 @@
-var redis = require("redis"); // 1
-var client = redis.createClient(); // 2
+const redis = require("redis"); // 1
+const client = redis.createClient(); // 2
 
 function upVote(id) { // 3
-  var key = "article:" + id + ":votes"; // 4 
+  let key = "article:" + id + ":votes"; // 4 
   client.incr(key); // 5
 }
 
 function downVote(id) { // 1
-  var key = "article:" + id + ":votes"; // 2 
+  let key = "article:" + id + ":votes"; // 2 
   client.decr(key); // 3
 }
 
 function showResults(id) {
   //var headlineKey = "article:" + id + ":headline";
-  var voteKey = "article:" + id + ":votes"; 
+  let voteKey = "article:" + id + ":votes"; 
   client.get(voteKey, function(err, replies) { // 1
       console.log('The article "' + id + '" has', replies[0], 'votes'); // 2
     }); 
