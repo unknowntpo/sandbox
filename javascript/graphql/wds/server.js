@@ -128,7 +128,7 @@ const schema = new GraphQLSchema({
   mutation: RootMutationType
 })
 
-console.log(expressGraphQL)
+console.log(expressGraphQL.constructor)
 app.use('/graphql', expressGraphQL({
   schema: schema,
   graphiql: true
