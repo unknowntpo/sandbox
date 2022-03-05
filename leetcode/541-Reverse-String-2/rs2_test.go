@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -40,13 +41,26 @@ a
 func reverseString2(s string, k int) string {
 	// want: 0 2k 4k 8k
 	// for every 2k
-	for i := 0; i < 2*k; i = i * 2 * k {
-		// for every k
-		for j := 0; j < k; j++ {
+	/*
+		for i := 0; i < 2*k; i = i * 2 * k {
+			// for every k
+			for j := 0; j < k; j++ {
+
+			}
 
 		}
-
+	*/
+	forEach := func(s string, f func(string)) {
+		for i := range s {
+			f(s[i : i+1])
+		}
 	}
+
+	forEach(s, func(c string) {
+		fmt.Printf("%s\n", c)
+	})
+
+	return ""
 }
 
 func TestReverseString2(t *testing.T) {
