@@ -41,23 +41,43 @@ a
 func reverseString2(s string, k int) string {
 	// want: 0 2k 4k 8k
 	// for every 2k
-	/*
-		for i := 0; i < 2*k; i = i * 2 * k {
-			// for every k
-			for j := 0; j < k; j++ {
-
-			}
-
+	fmt.Printf("type of s[0]: %T", s[0])
+	forEach := func(s string, f func(byte)) {
+		for _, b := range []byte(s) {
+			f(b)
 		}
-	*/
-	forEach := func(s string, f func(string)) {
-		for i := range s {
-			f(s[i : i+1])
+	}
+	forEach(s, func(b byte) {
+		fmt.Printf("%s ", string(b))
+	})
+
+	fmt.Println("\n********for each k")
+	forEachK := func(s string, k int, f func(byte)) {
+		for i := 0; i < len(s); i = i + k {
+			fmt.Printf("%s ", string(s[i]))
 		}
 	}
 
-	forEach(s, func(c string) {
-		fmt.Printf("%s\n", c)
+	forEachK(s, k, func(b byte) {
+		fmt.Printf("%s ", string(b))
+	})
+
+	fmt.Println("\n*******for each 2k")
+	forEach2K := func(s string, k int, f func(byte)) {
+		for i := 0; i < len(s); i = i + 2*k {
+			fmt.Printf("%s ", string(s[i]))
+		}
+	}
+
+	forEach2K(s, k, func(b byte) {
+		fmt.Printf("%s ", string(b))
+	})
+
+	// TODO: What does this means ?
+	forEach2K(s, k, func(b byte) {
+		forEachK(s, k, func(b byte) {
+			fmt.Printf("%s ", string(b))
+		})
 	})
 
 	return ""
