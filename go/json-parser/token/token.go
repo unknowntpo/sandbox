@@ -13,11 +13,19 @@ const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
 
-	OBJECT = "OBJECT"
-	STRING = "STRING"
-	NUMBER = "NUMBER"
-	ARRAY  = "ARRAY"
-	NULL   = "NULL"
+	OBJECT  = "OBJECT"
+	STRING  = "STRING"
+	BOOLEAN = "BOOLEAN"
+	NUMBER  = "NUMBER"
+	ARRAY   = "ARRAY"
+	NULL    = "NULL"
+
+	COLON       = ":"
+	COMMA       = ","
+	LCURBRACKET = "{"
+	RCURBRACKET = "}"
+	LSQBRACKET  = "["
+	RSQBRACKET  = "]"
 )
 
 /*
