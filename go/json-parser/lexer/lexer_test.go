@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"../token"
+	"testing"
+)
 
 func TestHelloWorld(t *testing.T) {
 	// t.Fatal("not implemented")
