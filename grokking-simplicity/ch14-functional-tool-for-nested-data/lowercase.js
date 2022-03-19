@@ -4,14 +4,14 @@ var user = {
     email: "JOE@EXAMPLE.COM"
 }
 
-function update(user, key, f) {
+
+let update = (user, key, f) => {
     field = user[key]
     user[key] = f(field)
     return user
 }
 
-const lowercase = function (field) {
-    return field.toLowerCase()
-}
+const lowercase = (field) => field.toLowerCase()
+
 user = update(user, 'email', lowercase)
 console.log(user)
