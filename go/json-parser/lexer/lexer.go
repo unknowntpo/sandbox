@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"../token"
+)
+
 type Lexer struct {
 	input        string
 	position     int // points to current read position
@@ -10,15 +16,16 @@ type Lexer struct {
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
-	return &Lexer{input}
+	return l
 }
 
 func (l *Lexer) readChar() {
-	if theEnd(readPosition, len(input)) {
+	if theEnd(l.readPosition, len(l.input)) {
 		l.ch = 0
 	} else {
-		l.ch = input[readPosition]
+		l.ch = l.input[l.readPosition]
 	}
+
 	l.position = l.readPosition
 	l.readPosition += 1
 }
@@ -26,10 +33,30 @@ func (l *Lexer) readChar() {
 // theEnd report whether we are at read end.
 // e.g. input: {"foo": "bar"}, if position is at '}', we are at the end
 func theEnd(pos int, length int) bool {
-	return pos == length
+	return pos >= length
 }
 
-// TODO: Implement nextToken
-func (l *Lexer) nextToken() token.Token {
+// TODO: Implement NextToken
+func (l *Lexer) NextToken() token.Token {
+	var tok token.Token
 
+	fmt.Printf("we got a %q\n", l.ch)
+	l.skipWhitespace()
+	switch l.ch {
+	case '{':
+		return newToken(token.LCURBRACKET, '{')
+	default:
+		fmt.Printf("we got a %q\n!", l.ch)
+	}
+	return tok
+}
+
+func (l *Lexer) skipWhitespace() {
+	for l.ch == ' ' || l.ch == '\n' || l.ch == '\t' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
+func newToken(tokenType token.TokenType, ch byte) token.Token {
+	return token.Token{Type: tokenType, Literal: string(ch)}
 }
