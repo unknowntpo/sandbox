@@ -40,15 +40,44 @@ func theEnd(pos int, length int) bool {
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
-	fmt.Printf("we got a %q\n", l.ch)
 	l.skipWhitespace()
+	fmt.Printf("we got a %q at input[%d], readPos: %d\n", l.ch, l.position, l.readPosition)
 	switch l.ch {
 	case '{':
-		return newToken(token.LCURBRACKET, '{')
+		l.readChar()
+		return newToken(token.LCURBRACKET, "{")
 	default:
+		if l.ch == '"' {
+			s := l.getUntilNextPair('"')
+			fmt.Println(s)
+			return newToken(token.STRING, string(s))
+		}
 		fmt.Printf("we got a %q\n!", l.ch)
 	}
+
+	l.readChar()
 	return tok
+}
+
+//
+/*
+
+e.g.
+123456
+"hello"
+*/
+func (l *Lexer) getUntilNextPair(c byte) string {
+	start := l.readPosition
+	var idx int
+
+	// advance 1 position, or we won't get into the loop because l.ch == c
+	l.readChar()
+	for idx = start; l.ch != c; idx++ {
+		fmt.Println("idx", idx)
+
+		l.readChar()
+	}
+	return l.input[start:idx]
 }
 
 func (l *Lexer) skipWhitespace() {
@@ -57,6 +86,6 @@ func (l *Lexer) skipWhitespace() {
 	}
 }
 
-func newToken(tokenType token.TokenType, ch byte) token.Token {
+func newToken(tokenType token.TokenType, ch string) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch)}
 }
