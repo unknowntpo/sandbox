@@ -46,17 +46,32 @@ func (l *Lexer) NextToken() token.Token {
 	case '{':
 		l.readChar()
 		return newToken(token.LCURBRACKET, "{")
+	case ':':
+		l.readChar()
+		return newToken(token.COLON, ":")
+	case ',':
+		l.readChar()
+		return newToken(token.COMMA, ",")
 	default:
-		if l.ch == '"' {
+		switch {
+		case l.ch == '"':
 			s := l.getUntilNextPair('"')
 			fmt.Println(s)
+			l.readChar()
 			return newToken(token.STRING, string(s))
+		case isDigit(l.ch):
+			// TODO: Implement readNumber
 		}
 		fmt.Printf("we got a %q\n!", l.ch)
+
 	}
 
 	l.readChar()
 	return tok
+}
+
+func isDigit(c byte) {
+	return l.ch >= '0' && l.ch <= '9'
 }
 
 //
