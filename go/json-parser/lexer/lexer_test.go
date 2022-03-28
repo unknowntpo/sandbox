@@ -3,6 +3,8 @@ package main
 import (
 	"../token"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHelloWorld(t *testing.T) {
@@ -89,5 +91,22 @@ func TestNextToken(t *testing.T) {
 			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
 				i, tt.expectedLiteral, tok.Literal)
 		}
+	}
+}
+
+func TestReadNumber(t *testing.T) {
+	tests := []struct {
+		name            string
+		input           string
+		expectedLiteral string
+	}{
+		{"normal digit", "12345 ", "12345"},
+		{"digit with decimal point", "0.1 ", "0.1"},
+	}
+
+	for _, tt := range tests {
+		l := New(tt.input)
+		gotLiteral := l.readNumber()
+		assert.Equal(t, tt.expectedLiteral, gotLiteral)
 	}
 }

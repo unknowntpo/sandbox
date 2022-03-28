@@ -60,6 +60,8 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			return newToken(token.STRING, string(s))
 		case isDigit(l.ch):
+			num := l.readNumber()
+			fmt.Println("num from readNumber", num)
 			// TODO: Implement readNumber
 		}
 		fmt.Printf("we got a %q\n!", l.ch)
@@ -70,8 +72,51 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
-func isDigit(c byte) {
-	return l.ch >= '0' && l.ch <= '9'
+func (l *Lexer) readNumber() string {
+	// e.g.
+	// 5.3
+	// 4.6
+	// 0.1
+	// 1
+	// 12343
+	// .1 // valid or invalid
+	var out []byte
+	out = append(out, l.input[l.position])
+
+	// number of dots we encountered
+	once := false
+	for {
+		fmt.Println("cur l.ch", string(l.ch))
+		// how to deal with invalid number ?
+		// we ignore it for now
+		if isDot(l.ch) && once == true {
+			// we got two dots, we just return current output
+			return string(out)
+		} else {
+			once = true
+			goto APPEND
+
+		}
+		if !isDigit(l.ch) {
+			return string(out)
+		}
+
+	APPEND:
+		// it's a digit
+		out = append(out, l.ch)
+		l.readChar()
+	}
+	return ""
+}
+
+func isDot(c byte) bool {
+	return c == '.'
+}
+
+// 0.1     out: 0.1
+
+func isDigit(c byte) bool {
+	return c >= '0' && c <= '9'
 }
 
 //
